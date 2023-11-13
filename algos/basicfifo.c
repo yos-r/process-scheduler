@@ -121,7 +121,7 @@ void fifo_scheduling(processus *head) {
         }
     }
 
-    printf("Total execution time is %d\n", totalExecutionTime);
+    printf("Total CPU time is %d\n", totalExecutionTime);
 }
 
 

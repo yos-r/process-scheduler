@@ -104,27 +104,89 @@ processus *sortProcesses(processus *head)
     return sorted;
 }
 
-void rr_robin(processus *head, int quantum)
+void sortByDurExecNonModifProcQueue(Queue *queue)
 {
-    processus *sortedProcesses = sortProcesses(head);
-    processus *current = sortedProcesses;
+    int swapped;
+    QueueNode *ptr1;
+    QueueNode *lptr = NULL;
 
+    /* Checking for an empty queue */
+    if (queue->front == NULL)
+        return;
+
+    do
+    {
+        swapped = 0;
+        ptr1 = queue->front;
+
+        while (ptr1->next != lptr)
+        {
+            if (ptr1->process->dur_exec_non_modif_proc > ptr1->next->process->dur_exec_non_modif_proc)
+            {
+                // Swap the nodes
+                processus *tempProcess = ptr1->process;
+                ptr1->process = ptr1->next->process;
+                ptr1->next->process = tempProcess;
+
+                swapped = 1;
+            }
+            else
+            {
+                ptr1 = ptr1->next;
+            }
+        }
+        lptr = ptr1;
+    } while (swapped);
+}
+void testSortQueue()
+{
     Queue *readyQueue = createQueue();
-    int time = 0; // Simulation time
-    printf("\n Round Robin Scheduling with quantum equal to: %d\n", quantum);
+    FILE *file = fopen("pcb.txt", "rt");
+    processus *p = enreg_bcp(file);
+    fclose(file);
 
+    processus *q = p;
+    while (q != NULL)
+    {
+        enqueue(readyQueue, q);
+        q = q->suiv;
+    }
+    // queue *test = readyQueue;
+    sortByDurExecNonModifProcQueue(readyQueue);
+    QueueNode *first = readyQueue->front;
+    while (first != NULL)
+    {
+        printf("\nprocess at queue number %s w/ exec time %d \n", first->process->code,first->process->dur_exec_non_modif_proc);
+        first = first->next;
+    }
+}
+void srtf(processus *head)
+{
+    int quantum = 3;
+    processus *sortedProcesses = sortProcesses(head);
+    Queue *readyQueue = createQueue();
+
+    int time = 0; // Simulation time
+    printf("\n Shortest Remaining Time First (SRTF):\n");
+
+    // Process the list starting from the process with the lowest date_arr
+    processus *current = sortedProcesses;
     while (current != NULL || readyQueue->front != NULL)
     {
-        // Check if a process arrives at the current time
         while (current != NULL && current->date_arr <= time)
         {
             printf("Process %s arrived at time %d\n", current->code, time);
             enqueue(readyQueue, current);
             current = current->suiv;
         }
+        // need to tsort the queue by
 
-        // Execute the process at the front of the ready queue
+        sortByDurExecNonModifProcQueue(readyQueue);
+
         processus *executingProcess = dequeue(readyQueue);
+
+        // Execute the process in the queue w/ the smallest remaining time
+
         if (executingProcess != NULL)
         {
             if (executingProcess->dur_exec_modif_proc < quantum)
@@ -139,17 +201,10 @@ void rr_robin(processus *head, int quantum)
                 time += quantum;
                 executingProcess->dur_exec_modif_proc -= quantum;
             }
-
-            // Update process state
-            // executingProcess->dur_exec_modif_proc -= quantum;
-            // time += quantum;
-
+            // did it end? 1- yes 2-no , add to the queue
             if (executingProcess->dur_exec_modif_proc <= 0)
             {
                 printf("Process %s is done with execution\n", executingProcess->code);
-                // Update process state (if needed)
-                // executingProcess->etat = 1;  // Process is completed
-                // executingProcess->turn = time - executingProcess->date_arr;
             }
             else
             {
@@ -166,27 +221,15 @@ void rr_robin(processus *head, int quantum)
     }
 }
 
-int main(int argc, char *argv[])
+int main()
 {
-
-    if (argc != 2)
-    {
-        fprintf(stderr, "Usage: %s <quantum>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
-
-    int quantum = atoi(argv[1]); // Convert the command-line argument to an integer
-    if (quantum <= 0)
-    {
-        fprintf(stderr, "Quantum must be a positive integer\n");
-        return EXIT_FAILURE;
-    }
-
     FILE *file = fopen("pcb.txt", "rt");
     processus *p = enreg_bcp(file);
     fclose(file);
-
-    rr_robin(p, quantum);
-
+    // afficherListe(p);
+    // Call the FIFO scheduling algorithm
+    // sortProcesses(p);
+    srtf(p);
+    // testSortQueue();
     return 0;
 }

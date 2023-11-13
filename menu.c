@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ncurses.h>
 
 void titre()
 {
@@ -41,7 +42,7 @@ int menu_prin(int enreg_don)
             else
             {
                 if((rep==50||rep==51)&&enreg_don==0)
-                    printf("\nYou need to upload your data first !!\n");
+                    printf("\n You need to upload your data first !!\n");
                 else
                     boucle=0;
             }
@@ -56,7 +57,9 @@ int menu_prin(int enreg_don)
 
 
 int main() {
-	titre();
-	menu_prin(1);
+	initscr();  // Initialize ncurses
+    titre();
+    menu_prin(1);
+    endwin();   // Cleanup ncurses
     return 0;
 }

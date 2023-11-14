@@ -22,8 +22,8 @@ void creatFile() {
     fclose(f);
 }
 
-int main() {
-    creatFile();
-    printf("file genereted.\n");
-    return 0;
-}
+// int main() {
+//     creatFile();
+//     printf("file genereted.\n");
+//     return 0;
+// }

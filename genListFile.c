@@ -63,10 +63,10 @@ void afficherListe(processus *head)
     }
 }
 
-int main()
-{
-    FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_bcp(file);
-    afficherListe(p);
-    return 0;
-}
+// int main()
+// {
+//     FILE *file = fopen("pcb.txt", "rt");
+//     processus *p = enreg_bcp(file);
+//     afficherListe(p);
+//     return 0;
+// }

@@ -5,6 +5,7 @@
 // #include <ncurses.h>
 #include <string.h>
 #include <ctype.h>
+
 #define maxim 500 //the maximum stop time
 #define meth_affich 1 //to choose the display method of the grill either 1 or 2
 
@@ -4645,7 +4646,6 @@ void afficher_proc(processus *proc,int nbr,char nom_fich[])
     while(boucle==1);
 
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void titre(void)
 {
@@ -4671,8 +4671,6 @@ int menu_prin(int enreg_don)
     {
         printf("\t\t\t\t\tyour choice : ");
         rep=getch();
-
-
         if(rep!=49&&rep!=50&&rep!=51&&rep!=52)
         {
             printf("\nPlease make a choice between 1 and 4 !!\n");
@@ -4762,7 +4760,7 @@ int main()
     }
 
     titre();
-
+    // credits
     printf("\t\t\t\t       Hello (^_^) !!\n\t\t            Here is a process management program \n\t\t         according to the type of scheduling chosen\n\n");
     printf("   This program has been created by ABOUABDELMAJID KHALIL: a student in an Engineering Moroccan School ");
     printf("  \n          if anybody wanna contact me : abouabdelmajidkhalil@gmail.com ");

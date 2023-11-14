@@ -1,3 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <string.h>
+#include <ctype.h>
+#ifndef COMMON_H
+#define COMMON_H
+#include "genListFile.c"
 typedef struct QueueNode
 {
     processus *process;
@@ -136,3 +144,4 @@ void sortByDurExecNonModifProcQueue(Queue *queue)
         lptr = ptr1;
     } while (swapped);
 }
+#endif

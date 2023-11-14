@@ -94,7 +94,7 @@
 
 
 // FIFO scheduling algorithm with a queue
-void basicfifo(processus *head) {
+void test(processus *head) {
     Queue *processQueue = createQueue();
     //sort the process
     processus *sortedProcesses = sortProcesses(head);

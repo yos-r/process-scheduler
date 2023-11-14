@@ -1,10 +1,14 @@
-void rr_robin(processus *head, int quantum)
+// #include "../genListFile.c"
+// #include "../misc.c"
+
+#include "../misc.h"
+void roundrobin(processus *head)
 {
     //sort processes by date of arrival
     processus *sortedProcesses = sortProcesses(head);
     //temp var that will be used to parse the processes list
     processus *current = sortedProcesses;
-
+    int quantum=3;
     Queue *readyQueue = createQueue();
     int time = 0; // Simulation time
     printf("\n Round Robin Scheduling with quantum equal to: %d\n", quantum);

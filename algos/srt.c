@@ -1,4 +1,6 @@
-void srtf(processus *head)
+#include "../misc.h"
+
+void srt(processus *head)
 {
     int quantum = 3;
     processus *sortedProcesses = sortProcesses(head);

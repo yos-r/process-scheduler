@@ -8,7 +8,7 @@
 #define maxim 500 //the maximum stop time
 #define meth_affich 1 //to choose the display method of the grill either 1 or 2
 
-typedef struct
+typedef struct comment
 {
     int elu;
     int pret;
@@ -35,7 +35,7 @@ typedef struct processus
 }
 processus ;
 
-typedef struct
+typedef struct info
 {
     int elu;
     int pret;
@@ -44,7 +44,7 @@ typedef struct
 }
 info;
 
-typedef struct
+typedef struct code_proc
 {
     char cd[30];
 }

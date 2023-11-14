@@ -3,6 +3,7 @@
 #include <string.h>
 void entete()
 {
+    
     printf(" ");
     printf(" ");
     printf(" ");

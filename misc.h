@@ -80,7 +80,7 @@ void displayTab(processus *tab)
     printf("\n");
     entete();
     int i = 0, x, y, z;
-    char* id;
+    char *id;
     while (current != NULL)
     {
         id = current->code;
@@ -88,10 +88,68 @@ void displayTab(processus *tab)
         y = current->dur_exec_non_modif_proc;
         z = current->priorite;
         printf("\n");
-        if (current->suiv!=NULL) milieu(id, x, y, z);
-        else fin_tab(id, x, y, z);
+        if (current->suiv != NULL)
+            milieu(id, x, y, z);
+        else
+            fin_tab(id, x, y, z);
         current = current->suiv;
     }
+}
+bool checkMulti(Queue *queue)
+{
+    QueueNode *current = queue->front; // get the front
+    int topPriority = current->process->priorite;
+    if (current->next != NULL && current->next->process->priorite == topPriority)
+    {
+        printf("\n will need roundrobin between processes of priority %d \n", topPriority);
+        return true;
+    } // need round robin
+    else
+        return false;
+}
+
+processus *buildList(Queue *queue)
+{
+    // Check if the queue is empty
+    if (queue == NULL || queue->front == NULL)
+    {
+        return NULL;
+    }
+
+    int topPriority = queue->front->process->priorite;
+    QueueNode *current = queue->front;
+
+    // Create the head of the new linked list
+    processus *newListHead = NULL;
+    processus *newListTail = NULL;
+
+    while (current != NULL && current->process->priorite == topPriority)
+    {
+        // Create a new processus node
+        processus *newNode = (processus *)malloc(sizeof(processus));
+        if (!newNode)
+        {
+            fprintf(stderr, "Memory allocation error\n");
+            exit(EXIT_FAILURE);
+        }
+
+        // copy the processus data
+        memcpy(newNode, current->process, sizeof(processus));
+        newNode->suiv = NULL;
+
+        // Add the new node to the linked list
+        if (newListHead == NULL)
+        {
+            newListHead = newListTail = newNode;
+        }
+        else
+        {
+            newListTail->suiv = newNode;
+            newListTail = newNode;
+        }
+        current = current->next;
+    }
+    return newListHead;
 }
 processus *sortProcesses(processus *head)
 {
@@ -123,9 +181,10 @@ processus *sortProcesses(processus *head)
     current = sorted;
     while (current != NULL)
     {
-        printf("\n process %s arrived at %d and has %d units to execute", current->code, current->date_arr, current->dur_exec_modif_proc);
+        // printf("\n process %s arrived at %d and has %d units to execute", current->code, current->date_arr, current->dur_exec_modif_proc);
         current = current->suiv;
     }
+    displayTab(sorted);
 
     return sorted;
 }
@@ -236,6 +295,5 @@ void sortByPriorityQueue(Queue *queue)
         lptr = ptr1;
     } while (swapped);
 }
-
 
 #endif

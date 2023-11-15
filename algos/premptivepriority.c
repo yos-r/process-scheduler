@@ -10,7 +10,7 @@ void premptivepriority(processus *head)
     int quantum=3; //need to be customizable
     Queue *readyQueue = createQueue();
     int time = 0; // Simulation time
-    displayTab(sortedProcesses);
+    // displayTab(sortedProcesses);
     printf("\n Pre-emptive priority scheduling: \n");
 
     while (current != NULL || readyQueue->front != NULL)

@@ -1,4 +1,5 @@
 #include "../misc.h"
+// gcc -shared -fPIC algos/srt.c -o algos/srt.so
 
 void srt(processus *head)
 {

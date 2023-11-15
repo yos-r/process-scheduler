@@ -189,7 +189,7 @@ int main()
         // algo(p);
         // free(soFiles[i]);
     }
-    algo = loadSchedulingAlgorithm(soFiles[2]); //2 for testing srtf
+    algo = loadSchedulingAlgorithm(soFiles[3]); //2 for testing srtf
 
     // free(soFiles);
     FILE *file = fopen("pcb.txt", "rt");

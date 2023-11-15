@@ -1,4 +1,3 @@
-%% testing SRTF: 
 PCB:
 
 process|t_A|t_E|p
@@ -19,9 +18,9 @@ process p5 arrived at 1 and has 3 units to execute
  process p2 arrived at 9 and has 4 units to execute
  process p6 arrived at 10 and has 9 units to execute
 
+1%% testing SRTF: 
 
  Shortest Remaining Time First (SRTF):
- 
 Time 0: CPU idle
 t= 1 Process p5 arrived and has 3 units to execute 
 stateOfQueue: | p5 (3) |
@@ -83,3 +82,68 @@ T= 37: executing process p6
 T= 38: executing process p6 
 T= 39: executing process p6 
 t=40 , process p6 is done with execution
+
+2%% testing premptive priority: 
+Pre-emptive priority scheduling: 
+
+Time 0: CPU idle
+t= 1 Process w/ priority 4 p5 arrived and has 3 units to execute 
+stateOfQueue: | p5 (4) |
+t= 1 Process w/ priority 8 p1 arrived and has 8 units to execute 
+stateOfQueue: | p1 (8) | p5 (4) |
+T= 1: executing process p1 
+t= 2 Process w/ priority 10 p4 arrived and has 4 units to execute 
+stateOfQueue: | p4 (10) | p1 (8) | p5 (4) |
+T= 2: executing process p4 
+T= 3: executing process p4 
+T= 4: executing process p4 
+T= 5: executing process p4 
+t=6 , process p4 is done with execution
+t= 6 Process w/ priority 5 p3 arrived and has 6 units to execute 
+stateOfQueue: | p1 (8) | p3 (5) | p5 (4) |
+T= 6: executing process p1 
+t= 7 Process w/ priority 2 p0 arrived and has 5 units to execute 
+stateOfQueue: | p1 (8) | p3 (5) | p5 (4) | p0 (2) |
+T= 7: executing process p1 
+T= 8: executing process p1 
+t= 9 Process w/ priority 3 p2 arrived and has 4 units to execute 
+stateOfQueue: | p1 (8) | p3 (5) | p5 (4) | p2 (3) | p0 (2) |
+T= 9: executing process p1 
+t= 10 Process w/ priority 7 p6 arrived and has 9 units to execute 
+stateOfQueue: | p1 (8) | p6 (7) | p3 (5) | p5 (4) | p2 (3) | p0 (2) |
+T= 10: executing process p1 
+T= 11: executing process p1 
+T= 12: executing process p1 
+t=13 , process p1 is done with execution
+T= 13: executing process p6 
+T= 14: executing process p6 
+T= 15: executing process p6 
+T= 16: executing process p6 
+T= 17: executing process p6 
+T= 18: executing process p6 
+T= 19: executing process p6 
+T= 20: executing process p6 
+T= 21: executing process p6 
+t=22 , process p6 is done with execution
+T= 22: executing process p3 
+T= 23: executing process p3 
+T= 24: executing process p3 
+T= 25: executing process p3 
+T= 26: executing process p3 
+T= 27: executing process p3 
+t=28 , process p3 is done with execution
+T= 28: executing process p5 
+T= 29: executing process p5 
+T= 30: executing process p5 
+t=31 , process p5 is done with execution
+T= 31: executing process p2 
+T= 32: executing process p2 
+T= 33: executing process p2 
+T= 34: executing process p2 
+t=35 , process p2 is done with execution
+T= 35: executing process p0 
+T= 36: executing process p0 
+T= 37: executing process p0 
+T= 38: executing process p0 
+T= 39: executing process p0 
+t=40 , process p0 is done with execution

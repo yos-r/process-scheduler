@@ -5,7 +5,9 @@
 #include <ctype.h>
 #ifndef COMMON_H
 #define COMMON_H
+
 #include "genListFile.c"
+#include "displayAll.h"
 typedef struct QueueNode
 {
     processus *process;
@@ -72,6 +74,25 @@ processus *dequeue(Queue *queue)
     free(temp);
     return process;
 }
+void displayTab(processus *tab)
+{
+    processus *current = tab;
+    printf("\n");
+    entete();
+    int i = 0, x, y, z;
+    char* id;
+    while (current != NULL)
+    {
+        id = current->code;
+        x = current->date_arr;
+        y = current->dur_exec_non_modif_proc;
+        z = current->priorite;
+        printf("\n");
+        if (current->suiv!=NULL) milieu(id, x, y, z);
+        else fin_tab(id, x, y, z);
+        current = current->suiv;
+    }
+}
 processus *sortProcesses(processus *head)
 {
     processus *current = head;
@@ -102,24 +123,50 @@ processus *sortProcesses(processus *head)
     current = sorted;
     while (current != NULL)
     {
-        printf("\n process %s arrived at %d and has %d units to execute", current->code, current->date_arr,current->dur_exec_modif_proc);
+        printf("\n process %s arrived at %d and has %d units to execute", current->code, current->date_arr, current->dur_exec_modif_proc);
         current = current->suiv;
     }
 
     return sorted;
 }
 
-void stateOfQueue(Queue *queue){
-    QueueNode *current=queue->front;
+void stateOfQueue(Queue *queue)
+{
+    QueueNode *current = queue->front;
 
     printf("stateOfQueue: |");
-    while (current!=NULL)
+    while (current != NULL)
     {
-        printf(" %s (%d) |",current->process->code,current->process->dur_exec_modif_proc);
-        current=current->next;
+        printf(" %s (%d remaining) |", current->process->code, current->process->dur_exec_modif_proc);
+        current = current->next;
     }
     printf("\n");
-    
+}
+// queue display for premptive priority
+void stateOfQueue3(Queue *queue)
+{
+    QueueNode *current = queue->front;
+
+    printf("stateOfQueue: |");
+    while (current != NULL)
+    {
+        printf(" %s (%d) |", current->process->code, current->process->priorite);
+        current = current->next;
+    }
+    printf("\n");
+}
+// queue display for roundrobin and fifo (sorted by order of arrival)
+void stateOfQueue2(Queue *queue)
+{
+    QueueNode *current = queue->front;
+
+    printf("stateOfQueue: |");
+    while (current != NULL)
+    {
+        printf(" %s |", current->process->code);
+        current = current->next;
+    }
+    printf("\n");
 }
 void sortByDurExecModifProcQueue(Queue *queue)
 {
@@ -155,4 +202,40 @@ void sortByDurExecModifProcQueue(Queue *queue)
         lptr = ptr1;
     } while (swapped);
 }
+void sortByPriorityQueue(Queue *queue)
+{
+    int swapped;
+    QueueNode *ptr1;
+    QueueNode *lptr = NULL;
+
+    // checking for an empty queue
+    if (queue->front == NULL)
+        return;
+
+    do
+    {
+        swapped = 0;
+        ptr1 = queue->front;
+
+        while (ptr1->next != lptr)
+        {
+            if (ptr1->process->priorite < ptr1->next->process->priorite)
+            {
+                // Swap the nodes
+                processus *tempProcess = ptr1->process;
+                ptr1->process = ptr1->next->process;
+                ptr1->next->process = tempProcess;
+
+                swapped = 1;
+            }
+            else
+            {
+                ptr1 = ptr1->next;
+            }
+        }
+        lptr = ptr1;
+    } while (swapped);
+}
+
+
 #endif

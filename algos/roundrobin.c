@@ -1,6 +1,9 @@
 // #include "../genListFile.c"
 // #include "../misc.c"
 
+// gcc -shared -fPIC algos/roundbobin.c -o algos/roundrobin.so
+
+
 #include "../misc.h"
 void roundrobin(processus *head)
 {
@@ -22,6 +25,7 @@ void roundrobin(processus *head)
             printf("Process %s arrived at time %d\n", current->code, current->date_arr);
             enqueue(readyQueue, current);
             current = current->suiv;
+            stateOfQueue2(readyQueue);
         }
 
         //take the process at the front of the queue

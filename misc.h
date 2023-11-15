@@ -102,15 +102,26 @@ processus *sortProcesses(processus *head)
     current = sorted;
     while (current != NULL)
     {
-        printf("\n process %s arrived at %d ", current->code, current->date_arr);
+        printf("\n process %s arrived at %d and has %d units to execute", current->code, current->date_arr,current->dur_exec_modif_proc);
         current = current->suiv;
     }
 
     return sorted;
 }
 
+void stateOfQueue(Queue *queue){
+    QueueNode *current=queue->front;
 
-void sortByDurExecNonModifProcQueue(Queue *queue)
+    printf("stateOfQueue: |");
+    while (current!=NULL)
+    {
+        printf(" %s (%d) |",current->process->code,current->process->dur_exec_modif_proc);
+        current=current->next;
+    }
+    printf("\n");
+    
+}
+void sortByDurExecModifProcQueue(Queue *queue)
 {
     int swapped;
     QueueNode *ptr1;
@@ -127,7 +138,7 @@ void sortByDurExecNonModifProcQueue(Queue *queue)
 
         while (ptr1->next != lptr)
         {
-            if (ptr1->process->dur_exec_non_modif_proc > ptr1->next->process->dur_exec_non_modif_proc)
+            if (ptr1->process->dur_exec_modif_proc > ptr1->next->process->dur_exec_modif_proc)
             {
                 // Swap the nodes
                 processus *tempProcess = ptr1->process;

@@ -2,26 +2,30 @@
 
 void srt(processus *head)
 {
-    int quantum = 3;
+    // no need for quantum in SRT
+    //  int quantum = 3;
     processus *sortedProcesses = sortProcesses(head);
     Queue *readyQueue = createQueue();
-
     int time = 0; // Simulation time
+
     printf("\n Shortest Remaining Time First (SRTF):\n");
 
-    // Process the list starting from the process with the lowest date_arr
-    processus *current = sortedProcesses;
+    processus *current = sortedProcesses; // sort list of processes by date of arrival
+
     while (current != NULL || readyQueue->front != NULL)
     {
         while (current != NULL && current->date_arr <= time)
         {
-            printf("Process %s arrived at time %d\n", current->code, time);
+            printf("t= %d Process %s arrived and has %d units to execute \n", current->date_arr, current->code, current->dur_exec_modif_proc);
             enqueue(readyQueue, current);
             current = current->suiv;
+            sortByDurExecModifProcQueue(readyQueue);
+            stateOfQueue(readyQueue);
         }
-        // need to tsort the queue by
+        // sort the queue by shortest remaning time
+        sortByDurExecModifProcQueue(readyQueue);
 
-        sortByDurExecNonModifProcQueue(readyQueue);
+        // might add small func to display the queue?
 
         processus *executingProcess = dequeue(readyQueue);
 
@@ -29,35 +33,28 @@ void srt(processus *head)
 
         if (executingProcess != NULL)
         {
-            if (executingProcess->dur_exec_modif_proc < quantum)
-            {
-                printf("Time %d: Executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
-                time += executingProcess->dur_exec_modif_proc;
-                executingProcess->dur_exec_modif_proc = 0;
-            }
-            else
-            {
-                printf("Time %d: Executing process %s for %d units\n", time, executingProcess->code, quantum);
-                time += quantum;
-                executingProcess->dur_exec_modif_proc -= quantum;
-            }
+            printf("T= %d: executing process %s \n", time, executingProcess->code);
+            executingProcess->dur_exec_modif_proc -= 1; // decrement by 1
+            time += 1;
+            // printf("T= %d: process %s has %d units left\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
+
+            
             // did it end? 1- yes 2-no , add to the queue
             if (executingProcess->dur_exec_modif_proc <= 0)
             {
-                printf("Process %s is done with execution\n", executingProcess->code);
+                printf("t=%d , process %s is done with execution\n", time, executingProcess->code);
             }
             else
             {
-                printf("Process %s still has %d units remaining\n", executingProcess->code, executingProcess->dur_exec_modif_proc);
-                // Add the process back to the ready queue if it has more to execute
+                // printf("t=%d , process %s still has %d units remaining\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
+                // add the process back to the ready queue if it has more to execute
                 enqueue(readyQueue, executingProcess);
             }
         }
         else
         {
             printf("Time %d: CPU idle\n", time);
-            time++;
+            time+=1;
         }
     }
 }
-

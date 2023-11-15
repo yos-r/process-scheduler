@@ -172,7 +172,7 @@ void titre(void)
 
 int main()
 {
-    const char *directory = "algos"; 
+    const char *directory = "algos";
     char **soFiles;
     int numFiles;
     SchedulingAlgorithm algo;
@@ -189,9 +189,13 @@ int main()
         // algo(p);
         // free(soFiles[i]);
     }
-    free(soFiles);
+    algo = loadSchedulingAlgorithm(soFiles[2]); //2 for testing srtf
 
-    // algo(p);
+    // free(soFiles);
+    FILE *file = fopen("pcb.txt", "rt");
+    processus *p = enreg_bcp(file);
+    fclose(file);
+    algo(p);
 
     // // info res[maxim];
     // // code_proc cod[20];

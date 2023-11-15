@@ -8,7 +8,7 @@ void roundrobin(processus *head)
     processus *sortedProcesses = sortProcesses(head);
     //temp var that will be used to parse the processes list
     processus *current = sortedProcesses;
-    int quantum=3;
+    int quantum=3; //need to be customizable
     Queue *readyQueue = createQueue();
     int time = 0; // Simulation time
     printf("\n Round Robin Scheduling with quantum equal to: %d\n", quantum);

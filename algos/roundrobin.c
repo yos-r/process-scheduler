@@ -25,6 +25,7 @@ void roundrobin(processus *head)
             printf("Process %s arrived at time %d\n", current->code, current->date_arr);
             enqueue(readyQueue, current);
             current = current->suiv;
+            sortByLastWait(readyQueue);
             stateOfQueue2(readyQueue);
         }
 
@@ -45,6 +46,7 @@ void roundrobin(processus *head)
                 time += quantum;
                 executingProcess->dur_exec_modif_proc -= quantum;
             }
+            executingProcess->last_wait=time;
 
             
             if (executingProcess->dur_exec_modif_proc <= 0)

@@ -21,6 +21,7 @@ typedef struct processus
     int dur_pret; // total waiting time !
     int debut;
     int fin;
+    int last_wait; 
 
     int dur_blq; // might omit
     int turn;    // might omit
@@ -42,7 +43,9 @@ processus *enreg_bcp(FILE *file)
         {
             processus *i = malloc(sizeof(processus));
             strcpy(i->code, id);
+
             i->date_arr = date_arr;
+            i->last_wait=date_arr;
             i->dur_exec_non_modif_proc = dur_exec_non_modif_proc;
             i->dur_exec_modif_proc = dur_exec_non_modif_proc;
             i->priorite = priorite;
@@ -370,4 +373,38 @@ void sortByPriorityQueue(Queue *queue)
     } while (swapped);
 }
 
+void sortByLastWait(Queue *queue)
+{
+    int swapped;
+    QueueNode *ptr1;
+    QueueNode *lptr = NULL;
+
+    /* Checking for an empty queue */
+    if (queue->front == NULL)
+        return;
+
+    do
+    {
+        swapped = 0;
+        ptr1 = queue->front;
+
+        while (ptr1->next != lptr)
+        {
+            if (ptr1->process->last_wait > ptr1->next->process->last_wait)
+            {
+                // Swap the nodes
+                processus *tempProcess = ptr1->process;
+                ptr1->process = ptr1->next->process;
+                ptr1->next->process = tempProcess;
+
+                swapped = 1;
+            }
+            else
+            {
+                ptr1 = ptr1->next;
+            }
+        }
+        lptr = ptr1;
+    } while (swapped);
+}
 #endif

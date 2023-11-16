@@ -4,3 +4,14 @@ time it left cpu
 total waiting time?
 order the list by priority and keep order of arrival/ waiting? 
 
+multilevel - premptive priority - srtf - roundrobin
+basic fifo.
+
+
+using readyQueue
+
+
+process: arrival/exec time / time used/ priority
+need to add time it entered cpu
+
+did it enter? did it start? 

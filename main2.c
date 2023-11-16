@@ -189,7 +189,7 @@ int main()
         // algo(p);
         // free(soFiles[i]);
     }
-    algo = loadSchedulingAlgorithm(soFiles[2]); //1 for testing multi-level
+    algo = loadSchedulingAlgorithm(soFiles[0]); //1 for testing multi-level
 
     // free(soFiles);
     FILE *file = fopen("pcb.txt", "rt");

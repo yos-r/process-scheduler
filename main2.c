@@ -189,7 +189,10 @@ int main()
         // algo(p);
         // free(soFiles[i]);
     }
-    algo = loadSchedulingAlgorithm(soFiles[0]); //1 for testing multi-level
+    printf("choose algorithm");
+    int choice;
+    scanf("%d", &choice);
+    algo = loadSchedulingAlgorithm(soFiles[choice]); // 1 for testing multi-level
 
     // free(soFiles);
     FILE *file = fopen("pcb.txt", "rt");

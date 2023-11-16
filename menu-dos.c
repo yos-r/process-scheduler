@@ -52,9 +52,6 @@ int menu_prin(int enreg_don)
 }
 
 
-
-
-
 int main() {
 	titre();
 	menu_prin(1);

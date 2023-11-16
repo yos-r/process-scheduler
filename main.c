@@ -5,13 +5,8 @@
 
 #include <dlfcn.h>
 
-// #include "genListFile.c" //file  generates the list
+#include "misc.h" // miscellaneous functs/structs..
 
-#include "misc.h" // file w/ queues+ sorting functions
-// including algorithms
-// #include "algos/roundrobin.c"
-// #include "algos/basicfifo.c"
-// #include "algos/srt.c"
 
 // #include <string.h>
 // #include <ctype.h>
@@ -179,6 +174,7 @@ int main()
 
     getSOFiles(directory, &soFiles, &numFiles);
     printf("Found %d .so files / algorithms :\n", numFiles);
+    generateFile();
     for (int i = 0; i < numFiles; i++)
     {
         printf("%d : %s\n", i, soFiles[i]);

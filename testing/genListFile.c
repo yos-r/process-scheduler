@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
-
+// THIS FILE IS NOT USED
 typedef struct processus
 {
     char code[30];

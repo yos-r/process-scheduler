@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdlib.h>
+
+// GENERATE random TEXT FILE 
 void creatFile() {
     FILE *f = fopen("pcb.txt", "w");
 
@@ -22,8 +24,8 @@ void creatFile() {
     fclose(f);
 }
 
-// int main() {
-//     creatFile();
-//     printf("file genereted.\n");
-//     return 0;
-// }
+int main() {
+    creatFile();
+    printf("file generated.\n");
+    return 0;
+}

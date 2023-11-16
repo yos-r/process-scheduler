@@ -3,14 +3,14 @@
 #include "../misc.h"
 void multilevel(processus *head)
 {
-    // sort processes by date of arrival
     processus *sortedProcesses = sortProcesses(head);
     processus *current = sortedProcesses;
     int quantum = 3; // need to be customizable
     Queue *readyQueue = createQueue();
     int time = 0; // Simulation time
-    printf("\n  Multilevel  scheduling: \n");
+    printf("\n  *** Multilevel  scheduling: \n");
     processus *temp;
+    
     while (current != NULL || readyQueue->front != NULL)
     {
         while (current != NULL && current->date_arr <= time)

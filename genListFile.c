@@ -6,14 +6,18 @@
 typedef struct processus
 {
     char code[30];
-    int date_arr;
-    int dur_exec_non_modif_proc;
-    int dur_exec_modif_proc;
-    int priorite;
-    int dur_pret;
-    int dur_blq;
-    int turn;
-    int etat;
+    int date_arr; //very important
+    int dur_exec_non_modif_proc; //very important
+    int dur_exec_modif_proc; // useful for checking if process is done 
+    int priorite; //very imporant
+    // metrics : 
+    int dur_pret; //total waiting time !
+    int debut;
+    int fin;
+
+    int dur_blq; //might omit
+    int turn; //might omit
+    int etat; //is it needed?
     struct processus *suiv; 
 } processus;
 

@@ -1,13 +1,102 @@
+// deals w/ queues, structs, file formatting
 #include <stdio.h>
-#include <stdlib.h>
-
+#include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include <ctype.h>
 #ifndef COMMON_H
 #define COMMON_H
 
-#include "genListFile.c"
+// #include "genListFile.c"
 #include "displayAll.h"
+
+typedef struct processus
+{
+    char code[30];
+    int date_arr;                // very important
+    int dur_exec_non_modif_proc; // very important
+    int dur_exec_modif_proc;     // useful for checking if process is done
+    int priorite;                // very imporant
+    // metrics :
+    int dur_pret; // total waiting time !
+    int debut;
+    int fin;
+
+    int dur_blq; // might omit
+    int turn;    // might omit
+    int etat;    // is it needed?
+    struct processus *suiv;
+} processus;
+
+processus *enreg_bcp(FILE *file)
+{
+    processus *p = NULL;
+    int date_arr, dur_exec_non_modif_proc, priorite;
+    char *fileRead;
+    char ligne[100];
+    char id[30];
+    char *part;
+    while (fgets(ligne, sizeof(ligne), file) != NULL)
+    {
+        if (sscanf(ligne, "%[^;];%d;%d;%d\n", id, &date_arr, &dur_exec_non_modif_proc, &priorite) == 4)
+        {
+            processus *i = malloc(sizeof(processus));
+            strcpy(i->code, id);
+            i->date_arr = date_arr;
+            i->dur_exec_non_modif_proc = dur_exec_non_modif_proc;
+            i->dur_exec_modif_proc = dur_exec_non_modif_proc;
+            i->priorite = priorite;
+            i->etat = 0;
+            i->dur_pret = 0;
+            i->dur_blq = 0;
+            i->suiv = p;
+            i->fin=-1;
+            p = i;
+        }
+    }
+    return p;
+}
+
+void afficherListe(processus *head)
+{
+    struct processus *i = head;
+    while (i != NULL)
+    {
+        printf("Code: %s\n", i->code);                                                           // cool
+        printf("date of arrival %d\n", i->date_arr);                                             // cool
+        printf("execution time: %d\n", i->dur_exec_non_modif_proc); // cool
+        printf("time left %d\n", i->dur_exec_modif_proc);         // cool but need to rename
+        printf("priority: %d\n", i->priorite);                                                   // cool
+        // printf("Duree de pret: %d\n", i->dur_pret);                                              // useful for metrics but hasn't been used yet
+        // printf("Duree de blocage: %d\n", i->dur_blq);                                            // might omit
+        printf("finish time: %d\n", i->fin);  
+        // printf("finish time: %d\n", i->);                                                           // might omit
+        printf("\n");
+        i = i->suiv;
+    }
+}
+void displayTab(processus *tab)
+{
+    processus *current = tab;
+    printf("\n");
+    entete();
+    int i = 0, x, y, z;
+    char *id;
+    while (current != NULL)
+    {
+        id = current->code;
+        x = current->date_arr;
+        y = current->dur_exec_non_modif_proc;
+        z = current->priorite;
+        printf("\n");
+        if (current->suiv != NULL)
+            milieu(id, x, y, z);
+        else
+            fin_tab(id, x, y, z);
+        current = current->suiv;
+    }
+}
+// types to deal w/ queues: node, queue, creation, insertion and deletion
 typedef struct QueueNode
 {
     processus *process;
@@ -74,27 +163,8 @@ processus *dequeue(Queue *queue)
     free(temp);
     return process;
 }
-void displayTab(processus *tab)
-{
-    processus *current = tab;
-    printf("\n");
-    entete();
-    int i = 0, x, y, z;
-    char *id;
-    while (current != NULL)
-    {
-        id = current->code;
-        x = current->date_arr;
-        y = current->dur_exec_non_modif_proc;
-        z = current->priorite;
-        printf("\n");
-        if (current->suiv != NULL)
-            milieu(id, x, y, z);
-        else
-            fin_tab(id, x, y, z);
-        current = current->suiv;
-    }
-}
+
+//MULTILEVEL:check if processes in the ready queue share the top priority: will need round robin 
 bool checkMulti(Queue *queue)
 {
     QueueNode *current = queue->front; // get the front
@@ -107,7 +177,7 @@ bool checkMulti(Queue *queue)
     else
         return false;
 }
-
+// build list of these processes : | need to order take into account last time it was paused
 processus *buildList(Queue *queue)
 {
     // Check if the queue is empty
@@ -151,6 +221,7 @@ processus *buildList(Queue *queue)
     }
     return newListHead;
 }
+// simple funct that orders processes by date of arrival.
 processus *sortProcesses(processus *head)
 {
     processus *current = head;
@@ -189,6 +260,7 @@ processus *sortProcesses(processus *head)
     return sorted;
 }
 
+//display display of queue (based on order of arrival)
 void stateOfQueue(Queue *queue)
 {
     QueueNode *current = queue->front;
@@ -227,6 +299,8 @@ void stateOfQueue2(Queue *queue)
     }
     printf("\n");
 }
+
+//functions to sort the ready queue (by srt or by priority)
 void sortByDurExecModifProcQueue(Queue *queue)
 {
     int swapped;

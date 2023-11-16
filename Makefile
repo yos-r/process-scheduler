@@ -12,10 +12,9 @@ $(LIB_FILES): $(SRC_FILES)
     	$(CC) -shared -fPIC $(file) -o $(patsubst $(SRC_DIR)/%.c,$(SRC_DIR)/%.so,$(file)); \
 	)
 
-
 MAIN = main
 $(MAIN): main.c
-	$(CC) main.c -o $(MAIN)
+	$(CC) main.c -o $(MAIN) -ldl
 
 # Rule to run the main program
 run: $(MAIN)

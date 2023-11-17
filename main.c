@@ -7,7 +7,6 @@
 
 #include "misc.h" // miscellaneous functs/structs..
 
-
 // #include <string.h>
 // #include <ctype.h>
 
@@ -35,7 +34,11 @@ void extractFunctionName(const char *algorithmName, char *functionName)
 SchedulingAlgorithm loadSchedulingAlgorithm(const char *algorithmName)
 {
     char fullPath[256];
+    printf("loading scheduling algo from lib");
+    //LOCAL VERSION
     snprintf(fullPath, sizeof(fullPath), "algos/%s", algorithmName);
+    // INSTALLATION VERSION
+    // snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
     void *handle = dlopen(fullPath, RTLD_LAZY);
     if (!handle)
     {
@@ -167,7 +170,11 @@ void titre(void)
 
 int main()
 {
+    // LOCAL VERSION
     const char *directory = "algos";
+    // INSTALLATION VERSION
+    // const char *directory = "/usr/local/lib/algos";
+
     char **soFiles;
     int numFiles;
     SchedulingAlgorithm algo;

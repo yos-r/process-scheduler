@@ -1,0 +1,8 @@
+on nov17th,~4:30pm
+i modified the functions that find the .so files and that load the functions within
+1- the directory from which to look for .so files has been changed to     
+    const char *directory = "/usr/local/lib/algos";
+        presuming that .so files have been built and have been placed in usr/local/lib in the make and run process
+2- load scheduling algorithm looks for function names from the files in usr/local/lib
+    snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
+    

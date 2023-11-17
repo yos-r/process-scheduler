@@ -9,7 +9,8 @@
 
 // #include <string.h>
 // #include <ctype.h>
-
+#include <gtk/gtk.h>
+#include <gtk/gtkx.h>
 #define maxim 500     // the maximum stop time
 #define meth_affich 1 // to choose the display method of the grill either 1 or 2
 

@@ -14,8 +14,14 @@ $(LIB_FILES): $(SRC_FILES)
 	)
 
 MAIN = main
+# $(MAIN): main.c
+# 	$(CC) $(CFLAGS) main.c -o $(MAIN) -ldl
+
+
+#make run that acknowledges gtk
+# gcc -Wno-format -o main main.c -Wno-deprecated-declarations -Wno-format-security -lm `pkg-config --cflags --libs gtk+-3.0` -export-dynamic
 $(MAIN): main.c
-	$(CC) $(CFLAGS) main.c -o $(MAIN) -ldl
+	$(CC) -Wno-format $(CFLAGS) main.c -o $(MAIN) -ldl -Wno-deprecated-declarations -Wno-format-security -lm `pkg-config --cflags --libs gtk+-3.0` -export-dynamic
 
 INSTALL_DIR = /usr/local/bin
 LIB_DIR = /usr/local/lib/algos

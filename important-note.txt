@@ -6,3 +6,7 @@ i modified the functions that find the .so files and that load the functions wit
 2- load scheduling algorithm looks for function names from the files in usr/local/lib
     snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
     
+
+for GTK: 
+    sudo apt-get update
+    sudo apt-get install libgtk-3-0

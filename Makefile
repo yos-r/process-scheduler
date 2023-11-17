@@ -40,6 +40,8 @@ $(LIB_DIR):
 # rule for running main
 run: $(MAIN)
 	sudo mkdir -p $(LIB_DIR)
+#copy the prototype file into usr/local/lib
+	sudo cp prototype.glade /usr/local/lib/
 	sudo cp $(SRC_DIR)/*.so $(LIB_DIR)
 	./$(MAIN)
 
@@ -50,6 +52,7 @@ install: $(LIB_DIR) main
 # sudo mkdir -p $(LIB_DIR)
 # install dynamic libraries from algos/
 	sudo install algos/*.so $(LIB_DIR)/
+# sudo install prototype.glade $(LIB_DIR)
 
 # rule to clean up the generated files
 clean:
@@ -60,5 +63,7 @@ uninstall:
 	sudo rm $(INSTALL_DIR)/main
 # remove dynamic libraries from algos/
 	sudo rm -rf $(LIB_DIR)
+# remove glade file
+	sudo rm -f /usr/local/lib/prototype.glade
 
 # .DEFAULT_GOAL := main

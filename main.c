@@ -14,6 +14,13 @@
 #define maxim 500     // the maximum stop time
 #define meth_affich 1 // to choose the display method of the grill either 1 or 2
 
+// TINKERING W/ GTK
+GtkWidget *window;
+GtkWidget *fixed1;
+GtkWidget *button1;
+GtkWidget *label1;
+GtkBuilder *builder;
+
 typedef void (*SchedulingAlgorithm)(processus *);
 void extractFunctionName(const char *algorithmName, char *functionName)
 {
@@ -36,7 +43,7 @@ SchedulingAlgorithm loadSchedulingAlgorithm(const char *algorithmName)
 {
     char fullPath[256];
     printf("loading scheduling algo from lib");
-    //LOCAL VERSION
+    // LOCAL VERSION
     snprintf(fullPath, sizeof(fullPath), "algos/%s", algorithmName);
     // INSTALLATION VERSION
     // snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
@@ -168,9 +175,30 @@ void titre(void)
     printf("                |                PROCESS SCHEDULER APPLICATION              |\n");
     printf("                 --------------------------------------------------------\n");
 }
-
-int main()
+// VERY BASIC GUI
+void on_button1_clicked(GtkButton *b)
 {
+    gtk_label_set_text(GTK_LABEL(label1), (const gchar *)"Hello World");
+    printf("you just clicked a button");
+}
+int main(int argc, char *argv[])
+{
+    // very basic GUI
+    gtk_init(&argc, &argv);
+    //LOCAL VERSION
+    builder = gtk_builder_new_from_file("prototype.glade");
+    // INSTALLATION VERSION
+    // builder = gtk_builder_new_from_file("/usr/local/lib/prototype.glade");
+
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    gtk_builder_connect_signals(builder, NULL);
+    fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
+    button1 = GTK_WIDGET(gtk_builder_get_object(builder, "button1"));
+    label1 = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
+    gtk_widget_show(window);
+    gtk_main();
+
     // LOCAL VERSION
     const char *directory = "algos";
     // INSTALLATION VERSION
@@ -179,102 +207,21 @@ int main()
     char **soFiles;
     int numFiles;
     SchedulingAlgorithm algo;
-
     getSOFiles(directory, &soFiles, &numFiles);
     printf("Found %d .so files / algorithms :\n", numFiles);
     generateFile();
     for (int i = 0; i < numFiles; i++)
     {
         printf("%d : %s\n", i, soFiles[i]);
-        // algo = loadSchedulingAlgorithm(soFiles[i]);
-        // FILE *file = fopen("pcb.txt", "rt");
-        // processus *p = enreg_bcp(file);
-        // fclose(file);
-        // algo(p);
-        // free(soFiles[i]);
     }
     printf("choose algorithm");
     int choice;
     scanf("%d", &choice);
     algo = loadSchedulingAlgorithm(soFiles[choice]); // 1 for testing multi-level
-
     // free(soFiles);
     FILE *file = fopen("pcb.txt", "rt");
     processus *p = enreg_bcp(file);
     fclose(file);
     algo(p);
-
-    // // info res[maxim];
-    // // code_proc cod[20];
-
-    // if (meth_affich == 1)
-    // {
-    //     decalge = 38;
-    // }
-    // else
-    // {
-    //     decalge = 60;
-    // }
-
-    // titre();
-
-    // // char r = getchar();
-    // boucle = 1;
-    // printf(" \n                             -------------------------------\n");
-    // printf("                            |            MAIN MENU          |\n");
-    // printf("                             -------------------------------\n");
-    // printf("                            |   1 . Loading data            |\n");
-    // ;
-    // printf("                            |   2 . List of data            |\n");
-    // ;
-    // printf("                            |   3 . Choice of algorithm     |\n");
-    // printf("                            |   4 . Exit                    |\n");
-    // printf("                             -------------------------------\n");
-
-    // do
-    // {
-    //     printf("\t\t\t\t\t your choice : ");
-    //     rep = getchar();
-
-    //     if (rep != '1' && rep != '2' && rep != '3' && rep != '4')
-    //     {
-    //         printf("\nPlease make a choice between 1 and 4 !!\n");
-    //         boucle = 1;
-    //     }
-    //     else
-    //     {
-    //         boucle = 0;
-    //         printf("\033[2J\033[H");
-    //     }
-    // } while (boucle == 1);
-    // do
-    // {
-    //     boucle = 1;
-    //     if (rep == '3')
-    //     {
-    //         // printf("\n executing basic FIFO from file \n");
-    //         // fifo_scheduling(p);
-
-    //         // printf("\n executing Round robin w/ quantum =2 from file \n");
-    //         // rr_robin(p, 2);
-
-    //         printf("\n executing SRT w/ quantum =3 from file \n");
-    //         srtf(p);
-
-    //         boucle = 0;
-    //     }
-    // } while (boucle == 1);
-    // printf("\033[2J\033[H");
-
-    // displayMenu();
-    // int choice;
-    // printf("Enter your choice: ");
-    // scanf("%d", &choice);
-    // char algorithmName[256];
-    // snprintf(algorithmName, sizeof(algorithmName), "algos/algorithm%d.so", choice);
-
-    // SchedulingAlgorithm algorithm = loadSchedulingAlgorithm(algorithmName);
-    // dlclose(algorithm);
-    // rr_robin(p);
-    return 0;
+    return EXIT_SUCCESS;
 }

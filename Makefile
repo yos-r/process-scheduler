@@ -51,11 +51,11 @@ install: $(LIB_DIR) main
 #create algos/ inside usr/local/lib if it doesn't exist
 # sudo mkdir -p $(LIB_DIR)
 # install dynamic libraries from algos/
-	sudo install algos/*.so $(LIB_DIR)/
-	sudo apt-get update
-	sudo apt-get install libgtk-3-0
-	sudo apt-get install libgtk-3-dev
-	sudo apt-get install pkg-config
+	# sudo install algos/*.so $(LIB_DIR)/
+	# sudo apt-get update
+	# sudo apt-get install libgtk-3-0
+	# sudo apt-get install libgtk-3-dev
+	# sudo apt-get install pkg-config
 # sudo install prototype.glade $(LIB_DIR)
 
 # rule to clean up the generated files

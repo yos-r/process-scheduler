@@ -16,10 +16,9 @@
 
 // TINKERING W/ GTK
 GtkWidget *window;
-GtkWidget *fixed1;
-GtkWidget *button1;
-GtkWidget *label1;
 GtkBuilder *builder;
+GtkStack *stack1;
+GtkBox *algorithm_box;
 
 typedef void (*SchedulingAlgorithm)(processus *);
 void extractFunctionName(const char *algorithmName, char *functionName)
@@ -176,29 +175,31 @@ void titre(void)
     printf("                 --------------------------------------------------------\n");
 }
 // VERY BASIC GUI
-void on_button1_clicked(GtkButton *b)
+// button switches  between pages
+void on_switchbutton_clicked(GtkButton *b)
 {
-    gtk_label_set_text(GTK_LABEL(label1), (const gchar *)"Hello World");
-    printf("you just clicked a button");
+    gtk_stack_set_visible_child_name(stack1, "page2");
+    g_print("switching to other page");
 }
-int main(int argc, char *argv[])
+void on_switchbutton1_clicked(GtkButton *b)
 {
-    // very basic GUI
-    gtk_init(&argc, &argv);
-    //LOCAL VERSION
-    builder = gtk_builder_new_from_file("prototype.glade");
-    // INSTALLATION VERSION
-    // builder = gtk_builder_new_from_file("/usr/local/lib/prototype.glade");
+    gtk_stack_set_visible_child_name(stack1, "page1");
+}
+void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
+{
+    const gchar *algorithm_name = gtk_button_get_label(button);
+    gtk_stack_set_visible_child_name(stack1, "page2");
+    SchedulingAlgorithm algo=loadSchedulingAlgorithm(g_strdup(algorithm_name));
+    
+    g_print("Algorithm selected: %s\n", algorithm_name);
+    FILE *file = fopen("pcb.txt", "rt");
+    processus *p = enreg_bcp(file);
+    fclose(file);
+    algo(p);
+}
 
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    gtk_builder_connect_signals(builder, NULL);
-    fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
-    button1 = GTK_WIDGET(gtk_builder_get_object(builder, "button1"));
-    label1 = GTK_WIDGET(gtk_builder_get_object(builder, "label1"));
-    gtk_widget_show(window);
-    gtk_main();
-
+void commandLine()
+{
     // LOCAL VERSION
     const char *directory = "algos";
     // INSTALLATION VERSION
@@ -209,7 +210,7 @@ int main(int argc, char *argv[])
     SchedulingAlgorithm algo;
     getSOFiles(directory, &soFiles, &numFiles);
     printf("Found %d .so files / algorithms :\n", numFiles);
-    generateFile();
+    // generateFile();
     for (int i = 0; i < numFiles; i++)
     {
         printf("%d : %s\n", i, soFiles[i]);
@@ -223,5 +224,44 @@ int main(int argc, char *argv[])
     processus *p = enreg_bcp(file);
     fclose(file);
     algo(p);
+}
+int main(int argc, char *argv[])
+{
+    // start w/ the command line, find the .so files
+    // commandLine();
+    const char *directory = "algos";
+    char **soFiles;
+    int numFiles;
+    SchedulingAlgorithm algo;
+    getSOFiles(directory, &soFiles, &numFiles);
+
+    gtk_init(&argc, &argv);
+    // very basic GUI
+    // LOCAL VERSION
+    builder = gtk_builder_new_from_file("prototype.glade");
+    // INSTALLATION VERSION
+    // builder = gtk_builder_new_from_file("/usr/local/lib/prototype.glade");
+
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    gtk_builder_connect_signals(builder, NULL);
+    stack1 = GTK_STACK(gtk_builder_get_object(builder, "stack1"));
+    algorithm_box = GTK_BOX(gtk_builder_get_object(builder, "algorithm_box"));
+    // generate the buttons
+    for (int i = 0; i < numFiles; i++)
+    {
+        g_print("huh %d : %s\n", i, soFiles[i]);
+        gchar *function_name = soFiles[i];
+        // Create a button with the function name
+        GtkWidget *button = gtk_button_new_with_label(function_name);
+        g_signal_connect(button, "clicked", G_CALLBACK(on_algorithm_button_clicked), NULL);
+        gtk_box_pack_start(algorithm_box, button, FALSE, FALSE, 0);
+        g_free(function_name);
+    }
+
+    gtk_widget_show_all(window);
+
+    gtk_main();
+
     return EXIT_SUCCESS;
 }

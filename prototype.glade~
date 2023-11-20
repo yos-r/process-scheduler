@@ -103,7 +103,7 @@ Advanced OS - Fall 2023 Project</property>
             </child>
             <child>
               <object class="GtkButton" id="switchbutton1">
-                <property name="label" translatable="yes">go to other page</property>
+                <property name="label" translatable="yes">go home pls</property>
                 <property name="width-request">145</property>
                 <property name="height-request">48</property>
                 <property name="visible">True</property>
@@ -114,8 +114,36 @@ Advanced OS - Fall 2023 Project</property>
                 <signal name="clicked" handler="on_switchbutton1_clicked" swapped="no"/>
               </object>
               <packing>
-                <property name="x">82</property>
-                <property name="y">171</property>
+                <property name="x">99</property>
+                <property name="y">387</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkDrawingArea" id="draw1">
+                <property name="width-request">258</property>
+                <property name="height-request">209</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-left">3</property>
+                <property name="margin-right">16</property>
+                <signal name="draw" handler="on_draw1_draw" swapped="no"/>
+              </object>
+              <packing>
+                <property name="x">63</property>
+                <property name="y">160</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">288</property>
+                <property name="height-request">32</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">this is where the graph thingy should be put</property>
+              </object>
+              <packing>
+                <property name="x">45</property>
+                <property name="y">17</property>
               </packing>
             </child>
           </object>

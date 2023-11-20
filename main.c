@@ -19,6 +19,8 @@ GtkWidget *window;
 GtkBuilder *builder;
 GtkStack *stack1;
 GtkBox *algorithm_box;
+GtkWidget *draw1;
+gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr); // will be used as signal . defined globally here
 
 typedef void (*SchedulingAlgorithm)(processus *);
 void extractFunctionName(const char *algorithmName, char *functionName)
@@ -184,18 +186,33 @@ void on_switchbutton_clicked(GtkButton *b)
 void on_switchbutton1_clicked(GtkButton *b)
 {
     gtk_stack_set_visible_child_name(stack1, "page1");
+    gtk_window_set_title(GTK_WINDOW(window), "Process scheduler application");
 }
 void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 {
     const gchar *algorithm_name = gtk_button_get_label(button);
     gtk_stack_set_visible_child_name(stack1, "page2");
-    SchedulingAlgorithm algo=loadSchedulingAlgorithm(g_strdup(algorithm_name));
-    
+    gtk_window_set_title(GTK_WINDOW(window), g_strdup(algorithm_name));
+    SchedulingAlgorithm algo = loadSchedulingAlgorithm(g_strdup(algorithm_name));
+
     g_print("Algorithm selected: %s\n", algorithm_name);
     FILE *file = fopen("pcb.txt", "rt");
     processus *p = enreg_bcp(file);
     fclose(file);
     algo(p);
+}
+// tinkering w/ cairo 
+gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr)
+{
+
+    cairo_set_line_width(cr, 1.0);
+    cairo_set_source_rgb(cr, 0.0, 1.0, 0.0); // green color
+    cairo_rectangle(cr, 10, 10, 50, 30);
+    cairo_fill(cr);
+    // cairo_stroke(cr);
+    // g_print("Currently drawing a green rectangle.\n");
+    g_print("currently drawing: ");
+    return false;
 }
 
 void commandLine()
@@ -247,6 +264,7 @@ int main(int argc, char *argv[])
     gtk_builder_connect_signals(builder, NULL);
     stack1 = GTK_STACK(gtk_builder_get_object(builder, "stack1"));
     algorithm_box = GTK_BOX(gtk_builder_get_object(builder, "algorithm_box"));
+    draw1 = GTK_WIDGET(gtk_builder_get_object(builder, "draw1"));
     // generate the buttons
     for (int i = 0; i < numFiles; i++)
     {
@@ -258,7 +276,6 @@ int main(int argc, char *argv[])
         gtk_box_pack_start(algorithm_box, button, FALSE, FALSE, 0);
         g_free(function_name);
     }
-
     gtk_widget_show_all(window);
 
     gtk_main();

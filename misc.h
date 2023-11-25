@@ -20,14 +20,46 @@ void generateFile() {
         perror("Erreur");
         return;
     }
+    int maxProcesses;
+    do{
+        printf("Enter the maximum number of processes: ");
+        scanf("%d", &maxProcesses);
+        if (maxProcesses <= 0) {
+        printf("Invalid input. Please enter a positive integer >0.\n");
+        }
+    }while (maxProcesses<=0);
+    int maxTA;
+    do{
+        printf("Enter the maximum number of TA: ");
+        scanf("%d", &maxTA);
+        if (maxTA <= 0) {
+        printf("Invalid input. Please enter a positive integer >0.\n");
+        }
+    }while (maxTA<=0);
+    int maxTE;
+    do{
+        printf("Enter the maximum number of TE: ");
+        scanf("%d", &maxTE);
+        if (maxTE <= 0) {
+        printf("Invalid input. Please enter a positive integer >0.\n");
+        }
+    }while (maxTE<=0);
+    int maxPRIO;
+    do{
+        printf("Enter the maximum number of Priority: ");
+        scanf("%d", &maxPRIO);
+        if (maxPRIO <= 0) {
+        printf("Invalid input. Please enter a positive integer >0.\n");
+        }
+    }while (maxPRIO<=0);
     srand(time(NULL));
 	int i;
-    int n=(rand()%10)+1;
+    int n=(rand()%maxProcesses)+1;
     printf("%d processes generated \n",n); //print the number of processes randomly generated
     for (i = 0; i < n; i++) {
-   		int x=(rand()%10)+1; // [1..10]
-        int y=(rand()%10)+1;
-        int z=(rand()%10)+1;
+   		int x=(rand()%maxTA); 
+        int y=(rand()%maxTE)+1;
+        int z=(rand()%maxPRIO)+1;
         fprintf(f,"p%d;%d;%d;%d\n",i,x,y,z);
     }
     fclose(f);

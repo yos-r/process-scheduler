@@ -2,37 +2,49 @@
 // gcc -shared -fPIC algos/basicfifo.c -o algos/basicfifo.so
 
 // FIFO scheduling algorithm with a queue
+
 void basicfifo(processus *head)
 {
+    affichP *aff=NULL;
+    affichP *q=aff;
     Queue *processQueue = createQueue();
     processus *sortedProcesses = sortProcesses(head);
     processus *current = sortedProcesses;
-    int time = 0; // Simulation time
-    int totalExecutionTime = 0;
-
+    int time = 0;
     printf("\n FIFO Scheduling:\n");
 
     while (current != NULL || processQueue->front != NULL)
     {
-        // check if a process arrives at the current time
         while (current != NULL && current->date_arr <= time)
         {
-
-            printf("t=%d Process %s arrives and is added to queue  \n", current->date_arr, current->code);
-
+            printf("process %s arrived at time %d \n",current->code,time);
             enqueue(processQueue, current);
             current = current->suiv;
             stateOfQueue2(processQueue);
         }
-        // execute the process at the front of the queue
         processus *executingProcess = dequeue(processQueue);
         if (executingProcess != NULL)
         {
-            printf("t %d: executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
+            printf("t %d: executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);           
+        
+		    affichP *i = malloc(sizeof(affichP));
+            strcpy(i->code,executingProcess->code);
+            i->ta=executingProcess->date_arr;
+            i->te=executingProcess->dur_exec_modif_proc;
+            i->start = time;
+            i->end= time+executingProcess->dur_exec_modif_proc;
+            i->suiv=NULL;
+            
+            if(aff==NULL)
+            {
+           		aff=i;
+                q=i;
+            }
+            else{
+            q->suiv=i;
+            q=i;
+            }
             time += executingProcess->dur_exec_modif_proc;
-            totalExecutionTime += executingProcess->dur_exec_modif_proc;
-            // printf("\n t %d: process %s is done ",time, executingProcess->code);
-            executingProcess->fin = time; // mark the time it ended
         }
         else
         {
@@ -40,42 +52,42 @@ void basicfifo(processus *head)
             time++;
         }
     }
-    printf("\n PERFORMANCE METRICS （￣︶￣）↗ ");
-    processus *metric = sortedProcesses;
-    afficherListe(sortedProcesses);
-    int totalturnaround = 0;
-    int totalwaiting = 0;
-    int n = 0;
+	 
+	affichP *x = aff;
+	printf("+----------------------+--------+--------+\n");
+	printf("|       Process        | Start  |  End   |\n");
+	printf("+----------------------+--------+--------+\n");
 
-    while (metric != NULL)
-    {
-        n++;
-        int turnaround = metric->fin - metric->date_arr;
-        totalturnaround += turnaround;
-        int waitingtime = turnaround - metric->dur_exec_non_modif_proc;
-        totalwaiting += waitingtime;
-        printf("\n process %s arrived at %d and left at %d, turnaround is: %d , wait time is %d\n",
-               metric->code, metric->date_arr, metric->fin, turnaround, waitingtime);
-        metric = metric->suiv;
-    }
-    float avgturnaround = totalturnaround / n;
-    float avgwaiting = totalwaiting / n;
+	while (x != NULL) {
+   		printf("| %-20s | %-6d | %-6d |\n", x->code, x->start, x->end);
+    	x->trotation=x->end-x->ta;
+    	x->tattente=x->trotation-x->te;
+    	x = x->suiv;
+	}
+	printf("+----------------------+--------+--------+\n");
 
-    printf("\n For the %d executed processes, avg waiting time is %f and avg. turnaround is %f", n, avgwaiting, avgturnaround);
-    printf("\nTotal CPU utilization time is %d\n", totalExecutionTime);
+
+	float TrotationMoy=0;
+	float TattenteMoy=0;
+	int nb=0;
+	x = aff;
+	while (x != NULL) {
+		nb++;
+		TrotationMoy+= x->trotation;
+	    TattenteMoy+= x->tattente;
+	    x = x->suiv;
+	}
+	TrotationMoy=TrotationMoy/nb;
+	TattenteMoy=TattenteMoy/nb;
+	printf("Average rotation time=%.2f   Average waiting time=%.2f\n",TrotationMoy,TattenteMoy);
 }
 
-// int main()
-// {
-//     FILE *file = fopen("pcb.txt", "rt");
-//     processus *p = enreg_bcp(file);
-//     fclose(file);
-
-//     // afficherListe(p);
-
-//     // Call the FIFO scheduling algorithm
-//     // sortProcesses(p);
-//     fifo_scheduling(p);
-
-//     return 0;
-// }
+/*
+ int main()
+ {
+    FILE *file = fopen("pcb.txt", "rt");
+    processus *p = enreg_bcp(file);
+    fclose(file);
+    basicfifo(p);
+   	return 0;
+}*/

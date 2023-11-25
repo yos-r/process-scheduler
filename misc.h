@@ -12,6 +12,20 @@
 // #include "genListFile.c"
 // #include "displayAll.h"
 
+typedef struct affichP
+{
+    char code[30];
+    int ta;
+    int te;
+    int start; 
+    int end;
+    float trotation;
+    float tattente;
+    struct affP *suiv;
+} affichP;
+
+
+
 //function that generates a random pcb.txt
 void generateFile() {
     FILE *f = fopen("pcb.txt", "w");
@@ -114,7 +128,7 @@ processus *enreg_bcp(FILE *file)
     }
     return p;
 }
-
+//test
 void afficherListe(processus *head)
 {
     struct processus *i = head;

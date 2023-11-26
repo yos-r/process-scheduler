@@ -27,7 +27,7 @@ typedef struct affichP
 
 
 //function that generates a random pcb.txt
-void generateFile(int max, int max_ta, int ) {
+void generateFile(int max, int max_ta, int max_te, int max_p) {
     FILE *f = fopen("pcb.txt", "w");
 
     if (f == NULL) {

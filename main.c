@@ -197,7 +197,7 @@ void on_configpcb_clicked(GtkButton *b)
 }
 void on_generateFile_clicked(GtkButton *b)
 {
-    generateFile();
+    generateFile(3,3,3,3);
     // gtk_stack_set_visible_child_name(stack1, "page3");
     // gtk_window_set_title(GTK_WINDOW(window), "PCB config");
 }

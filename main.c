@@ -20,6 +20,8 @@ GtkBuilder *builder;
 GtkStack *stack1;
 GtkBox *algorithm_box;
 GtkWidget *draw1;
+GtkWidget *configpcb;
+
 gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr); // will be used as signal . defined globally here
 
 typedef void (*SchedulingAlgorithm)(processus *);
@@ -187,6 +189,17 @@ void on_switchbutton1_clicked(GtkButton *b)
 {
     gtk_stack_set_visible_child_name(stack1, "page1");
     gtk_window_set_title(GTK_WINDOW(window), "Process scheduler application");
+}
+void on_configpcb_clicked(GtkButton *b)
+{
+    gtk_stack_set_visible_child_name(stack1, "page3");
+    gtk_window_set_title(GTK_WINDOW(window), "PCB config");
+}
+void on_generateFile_clicked(GtkButton *b)
+{
+    generateFile();
+    // gtk_stack_set_visible_child_name(stack1, "page3");
+    // gtk_window_set_title(GTK_WINDOW(window), "PCB config");
 }
 void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 {

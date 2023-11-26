@@ -18,24 +18,24 @@
             <property name="can-focus">False</property>
             <child>
               <object class="GtkLabel">
-                <property name="width-request">208</property>
-                <property name="height-request">39</property>
+                <property name="width-request">212</property>
+                <property name="height-request">42</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-left">121</property>
                 <property name="margin-right">129</property>
                 <property name="label" translatable="yes">Process scheduler application
 Advanced OS - Fall 2023 Project</property>
-                <property name="use-underline">True</property>
-                <property name="selectable">True</property>
               </object>
               <packing>
-                <property name="y">51</property>
+                <property name="x">20</property>
+                <property name="y">58</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="switchbutton">
-                <property name="label" translatable="yes">go to other page</property>
+                <property name="label" translatable="yes">go to other page pls
+</property>
                 <property name="width-request">145</property>
                 <property name="height-request">39</property>
                 <property name="visible">True</property>
@@ -76,6 +76,21 @@ Advanced OS - Fall 2023 Project</property>
               <packing>
                 <property name="x">46</property>
                 <property name="y">147</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="configpcb">
+                <property name="label" translatable="yes">configure pcb</property>
+                <property name="width-request">173</property>
+                <property name="height-request">37</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="on_configpcb_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="x">136</property>
+                <property name="y">392</property>
               </packing>
             </child>
           </object>
@@ -157,10 +172,142 @@ Advanced OS - Fall 2023 Project</property>
           <object class="GtkFixed">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <child>
+              <object class="GtkSpinButton" id="maxNumber">
+                <property name="width-request">106</property>
+                <property name="height-request">34</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="update-policy">if-valid</property>
+              </object>
+              <packing>
+                <property name="x">217</property>
+                <property name="y">128</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">78</property>
+                <property name="height-request">34</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">max #proc</property>
+              </object>
+              <packing>
+                <property name="x">80</property>
+                <property name="y">131</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">107</property>
+                <property name="height-request">35</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">max arrival time</property>
+              </object>
+              <packing>
+                <property name="x">59</property>
+                <property name="y">186</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">107</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">max exec time</property>
+              </object>
+              <packing>
+                <property name="x">61</property>
+                <property name="y">210</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">107</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">max priority</property>
+              </object>
+              <packing>
+                <property name="x">72</property>
+                <property name="y">257</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="maxArrival">
+                <property name="width-request">118</property>
+                <property name="height-request">34</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="update-policy">if-valid</property>
+              </object>
+              <packing>
+                <property name="x">215</property>
+                <property name="y">177</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="maxExec">
+                <property name="width-request">118</property>
+                <property name="height-request">36</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="update-policy">if-valid</property>
+              </object>
+              <packing>
+                <property name="x">210</property>
+                <property name="y">229</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="maxPrio">
+                <property name="width-request">118</property>
+                <property name="height-request">34</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="update-policy">if-valid</property>
+              </object>
+              <packing>
+                <property name="x">214</property>
+                <property name="y">275</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="width-request">201</property>
+                <property name="height-request">49</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">pcb configuration</property>
+              </object>
+              <packing>
+                <property name="x">111</property>
+                <property name="y">30</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="generateFile">
+                <property name="label" translatable="yes">generate random pcb.txt file</property>
+                <property name="width-request">209</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="on_generateFile_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="x">107</property>
+                <property name="y">372</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="name">page3</property>
-            <property name="title" translatable="yes">page3</property>
+            <property name="title" translatable="yes">PCB configuration</property>
             <property name="position">2</property>
           </packing>
         </child>

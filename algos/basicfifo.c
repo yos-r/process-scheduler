@@ -17,7 +17,6 @@ void basicfifo(processus *head)
     {
         while (current != NULL && current->date_arr <= time)
         {
-            printf("process %s arrived at time %d \n",current->code,time);
             enqueue(processQueue, current);
             current = current->suiv;
             stateOfQueue2(processQueue);

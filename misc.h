@@ -19,15 +19,92 @@ typedef struct affichP
     int te;
     int start; 
     int end;
-    float trotation;
-    float tattente;
-    struct affP *suiv;
+    int trotation;
+    int tattente;
+    struct affichP *suiv;
 } affichP;
+affichP* LastOcProcessus(affichP* head, char* code) {
+    affichP* last = NULL;
+    affichP* courant = head;
+    while (courant != NULL) {
+        if (strcmp(courant->code, code) == 0) {
+            last = courant;
+        }
+        courant = courant->suiv;
+    }
+    return last;
+}
+bool existeProcessus(affichP* head, char* code) {
+    affichP* courant = head;
+    while (courant != NULL) {
+        if (strcmp(courant->code,code) == 0) {
+            return true;
+        }
+        courant = courant->suiv;
+    }
+    return false;
+}
+affichP* insererProcessus(affichP* head, affichP* x) {
+    affichP* newProcessus = malloc(sizeof(affichP));
+    if (newProcessus == NULL) {
+        return head;
+    }
+    strcpy(newProcessus->code, x->code);
+    newProcessus->trotation = x->trotation;
+    newProcessus->tattente = x->tattente;
+    newProcessus->suiv = head;
+    return newProcessus;
+}
+void GantAndStatistic(affichP *aff)
+{
+affichP *x = aff;
+    affichP *last=NULL;
+    affichP *used=NULL;
+	printf("+----------------------+--------+--------+\n");
+	printf("|       Process        | Start  |  End   |\n");
+	printf("+----------------------+--------+--------+\n");
+	while (x != NULL) {
+   	    printf("| %-20s | %-6d | %-6d |\n", x->code, x->start, x->end);
+        if(existeProcessus(used,x->code)==false)
+        {
+        last=LastOcProcessus(aff,x->code);
+    	last->trotation=last->end-last->ta;
+    	last->tattente=last->trotation-last->te;
+        used=insererProcessus(used,last);
+       }
+        x = x->suiv;
+	}
+	printf("+----------------------+--------+--------+\n");
+	float TrotationMoy=0;
+	float TattenteMoy=0;
+	int nb=0;
+	x = used;
+	while (x != NULL) {
+		nb++;
+		TrotationMoy+= x->trotation;
+	    TattenteMoy+= x->tattente;
+        printf("%s: rotation time=%d  ,waiting time=%d \n",x->code,x->trotation,x->tattente);
+	    x = x->suiv;
+	}
+	TrotationMoy=TrotationMoy/nb;
+	TattenteMoy=TattenteMoy/nb;
+	printf("Average rotation time=%.2f   Average waiting time=%.2f\n",TrotationMoy,TattenteMoy);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
 //function that generates a random pcb.txt
-void generateFile(int max, int max_ta, int max_te, int max_p) {
+void generateFile() {
     FILE *f = fopen("pcb.txt", "w");
 
     if (f == NULL) {

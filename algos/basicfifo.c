@@ -29,7 +29,7 @@ void basicfifo(processus *head)
 		    affichP *i = malloc(sizeof(affichP));
             strcpy(i->code,executingProcess->code);
             i->ta=executingProcess->date_arr;
-            i->te=executingProcess->dur_exec_modif_proc;
+            i->te=executingProcess->dur_exec_non_modif_proc;
             i->start = time;
             i->end= time+executingProcess->dur_exec_modif_proc;
             i->suiv=NULL;
@@ -51,34 +51,7 @@ void basicfifo(processus *head)
             time++;
         }
     }
-	 
-	affichP *x = aff;
-	printf("+----------------------+--------+--------+\n");
-	printf("|       Process        | Start  |  End   |\n");
-	printf("+----------------------+--------+--------+\n");
-
-	while (x != NULL) {
-   		printf("| %-20s | %-6d | %-6d |\n", x->code, x->start, x->end);
-    	x->trotation=x->end-x->ta;
-    	x->tattente=x->trotation-x->te;
-    	x = x->suiv;
-	}
-	printf("+----------------------+--------+--------+\n");
-
-
-	float TrotationMoy=0;
-	float TattenteMoy=0;
-	int nb=0;
-	x = aff;
-	while (x != NULL) {
-		nb++;
-		TrotationMoy+= x->trotation;
-	    TattenteMoy+= x->tattente;
-	    x = x->suiv;
-	}
-	TrotationMoy=TrotationMoy/nb;
-	TattenteMoy=TattenteMoy/nb;
-	printf("Average rotation time=%.2f   Average waiting time=%.2f\n",TrotationMoy,TattenteMoy);
+    GantAndStatistic(aff);
 }
 
 /*
@@ -89,4 +62,5 @@ void basicfifo(processus *head)
     fclose(file);
     basicfifo(p);
    	return 0;
-}*/
+}
+*/

@@ -1,21 +1,21 @@
-// #include "../genListFile.c"
-// #include "../misc.c"
-
 // gcc -shared -fPIC algos/roundbobin.c -o algos/roundrobin.so
-
-
 #include "../misc.h"
 void roundrobin(processus *head)
-{
-    //sort processes by date of arrival
+{   affichP *aff=NULL;
+    affichP *q=aff;
     processus *sortedProcesses = sortProcesses(head);
     //temp var that will be used to parse the processes list
     processus *current = sortedProcesses;
-    int quantum=3; //need to be customizable
+    int quantum;
+    do{
+        printf("\nEnter the quantum value : ");
+        scanf("%d", &quantum);
+        if (quantum <= 0) {
+        printf("Invalid input. Please enter a positive integer >0.\n");
+        }
+    }while (quantum<=0);
     Queue *readyQueue = createQueue();
-    int time = 0; // Simulation time
-    printf("\n Round Robin Scheduling with quantum equal to: %d\n", quantum);
-
+    int time = 0; 
     //stop when current is null AND readyqueue is empty!
     while (current != NULL || readyQueue->front != NULL)
     {
@@ -28,31 +28,66 @@ void roundrobin(processus *head)
             sortByLastWait(readyQueue);
             stateOfQueue2(readyQueue);
         }
-
         //take the process at the front of the queue
         processus *executingProcess = dequeue(readyQueue);
         // A- the process taken from the queue is executed B- no process in the queue
         if (executingProcess != NULL)
         {
             if (executingProcess->dur_exec_modif_proc < quantum)
-            {
+            {if(q==NULL||strcmp(q->code,executingProcess->code)!=0){
                 printf("T= %d: Executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
+                affichP *i = malloc(sizeof(affichP));
+                strcpy(i->code,executingProcess->code);
+                i->ta=executingProcess->date_arr;
+                i->te=executingProcess->dur_exec_non_modif_proc;
+                i->start = time;
+                i->end= time+executingProcess->dur_exec_modif_proc;
+                i->suiv=NULL; 
+               if(aff==NULL)
+                {
+           		    aff=i;
+                    q=i;
+                }
+                else{
+                    q->suiv=i;
+                    q=i;
+                }}
+                else {
+                    q->end=q->end+executingProcess->dur_exec_modif_proc;
+                }
                 time += executingProcess->dur_exec_modif_proc;
                 executingProcess->dur_exec_modif_proc = 0;
             }
             else
-            {
+            {   if(q==NULL||strcmp(q->code,executingProcess->code)!=0){
                 printf("T= %d: Executing process %s for %d units\n", time, executingProcess->code, quantum);
+                affichP *i = malloc(sizeof(affichP));
+                strcpy(i->code,executingProcess->code);
+                i->ta=executingProcess->date_arr;
+                i->te=executingProcess->dur_exec_non_modif_proc;
+                i->start = time;
+                i->end= time+quantum;
+                i->suiv=NULL; 
+               if(aff==NULL)
+                {
+           		    aff=i;
+                    q=i;
+                }
+                else{
+                    q->suiv=i;
+                    q=i;
+                }
+                }else
+                {
+                q->end=q->end+quantum;
+                }
                 time += quantum;
                 executingProcess->dur_exec_modif_proc -= quantum;
             }
-            executingProcess->last_wait=time;
-
-            
+            executingProcess->last_wait=time; 
             if (executingProcess->dur_exec_modif_proc <= 0)
             {
-                printf(" at t= %d Process %s is done with execution\n",time, executingProcess->code);
-                
+                printf(" at t= %d Process %s is done with execution\n",time, executingProcess->code);      
             }
             else
             {
@@ -68,31 +103,15 @@ void roundrobin(processus *head)
             time++;
         }
     }
+    GantAndStatistic(aff);
 }
-
-// USE MAIN if you want cmd args
-
-// int main(int argc, char *argv[])
-// {
-
-//     if (argc != 2)
-//     {
-//         fprintf(stderr, "Usage: %s <quantum>\n", argv[0]);
-//         return EXIT_FAILURE;
-//     }
-
-//     int quantum = atoi(argv[1]); // Convert the command-line argument to an integer
-//     if (quantum <= 0)
-//     {
-//         fprintf(stderr, "Quantum must be a positive integer\n");
-//         return EXIT_FAILURE;
-//     }
-
-//     FILE *file = fopen("pcb.txt", "rt");
-//     processus *p = enreg_bcp(file);
-//     fclose(file);
-
-//     rr_robin(p, quantum);
-
-//     return 0;
-// }
+/*
+int main()
+ { 
+     FILE *file = fopen("pcb.txt", "rt");
+     processus *p = enreg_bcp(file);
+     fclose(file);
+     roundrobin(p);
+     return 0;
+}
+*/

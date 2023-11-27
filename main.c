@@ -197,10 +197,15 @@ void on_configpcb_clicked(GtkButton *b)
 }
 void on_generateFile_clicked(GtkButton *b)
 {
-    generateFile(3,3,3,3);
-    // gtk_stack_set_visible_child_name(stack1, "page3");
-    // gtk_window_set_title(GTK_WINDOW(window), "PCB config");
+    generateFile(5,10,10,10);
+    FILE *file = fopen("pcb.txt", "rt");
+    processus *p = enreg_bcp(file);
+    fclose(file);
+    displayTab(p);
+    gtk_stack_set_visible_child_name(stack1, "page1");
+    gtk_window_set_title(GTK_WINDOW(window), "Process scheduler application");
 }
+
 void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 {
     const gchar *algorithm_name = gtk_button_get_label(button);
@@ -213,6 +218,10 @@ void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
     processus *p = enreg_bcp(file);
     fclose(file);
     algo(p);
+}
+void on_maxNumber_change_value(GtkSpinButton *spinbutton, gpointer user_data){
+        g_print("value changed \n");
+        
 }
 // tinkering w/ cairo 
 gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr)

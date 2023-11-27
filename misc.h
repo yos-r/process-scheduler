@@ -45,7 +45,7 @@ bool existeProcessus(affichP* head, char* code) {
     return false;
 }
 affichP* insererProcessus(affichP* head, affichP* x) {
-    affichP* newProcessus = malloc(sizeof(affichP));
+    affichP* newProcessus = (affichP*) malloc(sizeof(affichP));
     if (newProcessus == NULL) {
         return head;
     }
@@ -187,7 +187,7 @@ processus *enreg_bcp(FILE *file)
     {
         if (sscanf(ligne, "%[^;];%d;%d;%d\n", id, &date_arr, &dur_exec_non_modif_proc, &priorite) == 4)
         {
-            processus *i = malloc(sizeof(processus));
+            processus *i = (processus *) malloc(sizeof(processus));
             strcpy(i->code, id);
 
             i->date_arr = date_arr;
@@ -224,7 +224,7 @@ void afficherListe(processus *head)
         i = i->suiv;
     }
 }
-
+/*
 void entete()
 {
     
@@ -707,6 +707,7 @@ void fin_tab(char *a, int b, int c, int d)
     putchar(217);
 }
 
+
 void showFile(int nb)
 {
     printf("\n\t\t               List of file data  : \n");
@@ -741,9 +742,6 @@ void showFile(int nb)
         }
     }
 }
-
-
-
 void displayTab(processus *tab)
 {
     processus *current = tab;
@@ -762,6 +760,28 @@ void displayTab(processus *tab)
             milieu(id, x, y, z);
         else
             fin_tab(id, x, y, z);
+        current = current->suiv;
+    }
+}
+*/
+void displayTab(processus *tab)
+{
+    processus *current = tab;
+    printf("\n");
+    printf("+------------+------------+---------------------------+----------+\n");
+    printf("| %-10s | %-10s | %-25s | %-8s |\n", "Process", "Date Arr", "Execution Time", "Priority");
+    printf("+------------+------------+---------------------------+----------+\n");
+    int i = 0, x, y, z;
+    char *id;
+    while (current != NULL)
+    {
+        id = current->code;
+        x = current->date_arr;
+        y = current->dur_exec_non_modif_proc;
+        z = current->priorite;
+        printf("| %-10s | %-10d | %-25d | %-8d |\n", id, x, y, z);
+        if (current->suiv == NULL)
+            printf("+------------+------------+---------------------------+----------+\n");
         current = current->suiv;
     }
 }

@@ -232,8 +232,7 @@ gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr)
     cairo_rectangle(cr, 10, 10, 50, 30);
     cairo_fill(cr);
     // cairo_stroke(cr);
-    // g_print("Currently drawing a green rectangle.\n");
-    g_print("currently drawing: ");
+    // g_print("currently drawing: ");
     return false;
 }
 

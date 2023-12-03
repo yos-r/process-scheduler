@@ -54,7 +54,7 @@ void basicfifo(processus *head)
     GantAndStatistic(aff);
 }
 
-/*
+
  int main()
  {
     FILE *file = fopen("pcb.txt", "rt");
@@ -63,4 +63,3 @@ void basicfifo(processus *head)
     basicfifo(p);
    	return 0;
 }
-*/

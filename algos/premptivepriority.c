@@ -21,11 +21,12 @@ void premptivepriority(processus *head)
             enqueue(readyQueue, current);
             current = current->suiv;
             sortByPriorityQueue(readyQueue);
-            stateOfQueue3(readyQueue);
+           // stateOfQueue3(readyQueue);
         }
+        
         // sort the queue by shortest remaning time
         sortByPriorityQueue(readyQueue);
-
+        stateOfQueue3(readyQueue);
         // might add small func to display the queue?
 
         processus *executingProcess = dequeue(readyQueue);

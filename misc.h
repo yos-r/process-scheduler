@@ -90,19 +90,6 @@ affichP *x = aff;
 	TattenteMoy=TattenteMoy/nb;
 	printf("Average rotation time=%.2f   Average waiting time=%.2f\n",TrotationMoy,TattenteMoy);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 //function that generates a random pcb.txt
 void generateFile() {
     FILE *f = fopen("pcb.txt", "w");
@@ -224,546 +211,6 @@ void afficherListe(processus *head)
         i = i->suiv;
     }
 }
-/*
-void entete()
-{
-    
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("        ");
-    putchar(218);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(194);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(194);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(194);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(191);
-    printf("\n");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("        ");
-    putchar(179);
-    printf(" ");
-    printf("  Process");
-    printf(" ");
-    putchar(179);
-    printf(" ");
-    printf("Date of arr");
-    putchar(179);
-    printf(" ");
-    printf("Executi time ");
-    putchar(179);
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("Priority ");
-    printf(" ");
-    putchar(179);
-    printf("\n");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("        ");
-    putchar(195);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(197);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(197);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(197);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(180);
-}
-
-void milieu(char *a, int b, int c, int d)
-{
-    int aa = strlen(a);
-    int bb;
-    int cc;
-    int dd;
-    int i;
-
-    if (b >= 10)
-        bb = 2;
-    else
-        bb = 1;
-
-    if (c >= 10)
-        cc = 2;
-    else
-        cc = 1;
-
-    if (d >= 10)
-        dd = 2;
-    else
-        dd = 1;
-
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("        ");
-    putchar(179);
-    printf(" ");
-
-    for (i = 1; i <= (9 - aa) / 2; i++)
-        printf(" ");
-    printf("%s", a);
-    for (i = 1; i <= ((9 - aa) / 2) + (9 - aa) % 2; i++)
-        printf(" ");
-
-    printf(" ");
-    putchar(179);
-    printf(" ");
-
-    if (bb == 1)
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", b);
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-    }
-    else
-    {
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-        printf("%d", b);
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-    }
-
-    printf(" ");
-    putchar(179);
-    printf(" ");
-
-    if (cc == 1)
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", c);
-        for (i = 1; i <= 6; i++)
-            printf(" ");
-    }
-    else
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", c);
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-    }
-
-    printf(" ");
-    putchar(179);
-    printf(" ");
-
-    if (dd == 1)
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", d);
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-    }
-    else
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", d);
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-    }
-    printf(" ");
-    putchar(179);
-    printf(" ");
-    printf("\n");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("        ");
-    putchar(195);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(197);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(197);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(197);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(180);
-}
-void fin_tab(char *a, int b, int c, int d)
-{
-    int aa = strlen(a), i;
-    int bb;
-    int cc;
-    int dd;
-    if (b >= 10)
-        bb = 2;
-    else
-        bb = 1;
-
-    if (c >= 10)
-        cc = 2;
-    else
-        cc = 1;
-
-    if (d >= 10)
-        dd = 2;
-    else
-        dd = 1;
-
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("        ");
-    putchar(179);
-    printf(" ");
-
-    for (i = 1; i <= (9 - aa) / 2; i++)
-        printf(" ");
-    printf("%s", a);
-    for (i = 1; i <= ((9 - aa) / 2) + (9 - aa) % 2; i++)
-        printf(" ");
-
-    printf(" ");
-    putchar(179);
-    printf(" ");
-
-    if (bb == 1)
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", b);
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-    }
-    else
-    {
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-        printf("%d", b);
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-    }
-
-    printf(" ");
-    putchar(179);
-    printf(" ");
-
-    if (cc == 1)
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", c);
-        for (i = 1; i <= 6; i++)
-            printf(" ");
-    }
-    else
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", c);
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-    }
-
-    printf(" ");
-    putchar(179);
-    printf(" ");
-
-    if (dd == 1)
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", d);
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-    }
-    else
-    {
-        for (i = 1; i <= 5; i++)
-            printf(" ");
-        printf("%d", d);
-        for (i = 1; i <= 4; i++)
-            printf(" ");
-    }
-    printf(" ");
-    putchar(179);
-    printf("\n");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf(" ");
-    printf("        ");
-    putchar(192);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(193);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(193);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(193);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(196);
-    putchar(217);
-}
-
-
-void showFile(int nb)
-{
-    printf("\n\t\t               List of file data  : \n");
-    printf("\n");
-    entete();
-    FILE *file = fopen("pcb.txt", "r");
-    if (file == NULL)
-    {
-        perror("Erreur");
-        //used to be getch() for windows
-        getc;
-    }
-    char ligne[100];
-    char id[10];
-    char ids[100][10];
-    int i = 0, x, y, z;
-    while (fgets(ligne, sizeof(ligne), file) != NULL)
-    {
-        if (sscanf(ligne, "%[^;];%d;%d;%d\n", id, &x, &y, &z) == 4)
-        {
-            i++;
-            if (i != nb)
-            {
-                printf("\n");
-                milieu(id, x, y, z);
-            }
-            else
-            {
-                printf("\n");
-                fin_tab(id, x, y, z);
-            }
-        }
-    }
-}
-void displayTab(processus *tab)
-{
-    processus *current = tab;
-    printf("\n");
-    entete();
-    int i = 0, x, y, z;
-    char *id;
-    while (current != NULL)
-    {
-        id = current->code;
-        x = current->date_arr;
-        y = current->dur_exec_non_modif_proc;
-        z = current->priorite;
-        printf("\n");
-        if (current->suiv != NULL)
-            milieu(id, x, y, z);
-        else
-            fin_tab(id, x, y, z);
-        current = current->suiv;
-    }
-}
-*/
 void displayTab(processus *tab)
 {
     processus *current = tab;
@@ -945,7 +392,6 @@ processus *sortProcesses(processus *head)
         current = current->suiv;
     }
     displayTab(sorted);
-
     return sorted;
 }
 
@@ -1024,6 +470,7 @@ void sortByDurExecModifProcQueue(Queue *queue)
         lptr = ptr1;
     } while (swapped);
 }
+/*
 void sortByPriorityQueue(Queue *queue)
 {
     int swapped;
@@ -1041,7 +488,7 @@ void sortByPriorityQueue(Queue *queue)
 
         while (ptr1->next != lptr)
         {
-            if (ptr1->process->priorite < ptr1->next->process->priorite)
+            if (ptr1->process->priorite <= ptr1->next->process->priorite)
             {
                 // Swap the nodes
                 processus *tempProcess = ptr1->process;
@@ -1058,6 +505,42 @@ void sortByPriorityQueue(Queue *queue)
         lptr = ptr1;
     } while (swapped);
 }
+*/
+void sortByPriorityQueue(Queue *queue)
+{
+    // checking for an empty queue or a single element
+    if (queue->front == NULL || queue->front->next == NULL)
+        return;
+
+    QueueNode *current, *compare, *min;
+
+    for (current = queue->front; current->next != NULL; current = current->next)
+    {
+        min = current;
+
+        // Find the minimum element in the unsorted part of the list
+        for (compare = current->next; compare != NULL; compare = compare->next)
+        {
+            if (compare->process->priorite >= min->process->priorite)
+            {
+                min = compare;
+            }
+        }
+
+        // Swap the found minimum element with the current element
+        if (min != current)
+        {
+            processus *tempProcess = current->process;
+            current->process = min->process;
+            min->process = tempProcess;
+        }
+    }
+}
+
+
+
+
+
 
 void sortByLastWait(Queue *queue)
 {

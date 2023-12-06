@@ -47,9 +47,9 @@ SchedulingAlgorithm loadSchedulingAlgorithm(const char *algorithmName)
     char fullPath[256];
     printf("loading scheduling algo from lib");
     // LOCAL VERSION
-    snprintf(fullPath, sizeof(fullPath), "algos/%s", algorithmName);
+    // snprintf(fullPath, sizeof(fullPath), "algos/%s", algorithmName);
     // INSTALLATION VERSION
-    // snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
+    snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
     void *handle = dlopen(fullPath, RTLD_LAZY);
     if (!handle)
     {
@@ -73,9 +73,10 @@ void getSOFiles(const char *directory, char ***soFiles, int *numFiles)
 {
     // Open the directory
     DIR *dir = opendir(directory);
+    //error happens here
     if (!dir)
     {
-        fprintf(stderr, "Error opening directory: %s\n", directory);
+        fprintf(stderr, "Error opening directory!!!: %s\n", directory);
         exit(EXIT_FAILURE);
     }
 
@@ -221,7 +222,6 @@ void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 }
 void on_maxNumber_change_value(GtkSpinButton *spinbutton, gpointer user_data){
         g_print("value changed \n");
-        
 }
 // tinkering w/ cairo 
 gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr)
@@ -239,9 +239,9 @@ gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr)
 void commandLine()
 {
     // LOCAL VERSION
-    const char *directory = "algos";
+    // const char *directory = "algos";
     // INSTALLATION VERSION
-    // const char *directory = "/usr/local/lib/algos";
+    const char *directory = "/usr/local/lib/algos";
 
     char **soFiles;
     int numFiles;
@@ -267,7 +267,8 @@ int main(int argc, char *argv[])
 {
     // start w/ the command line, find the .so files
     // commandLine();
-    const char *directory = "algos";
+    const char *directory = "/usr/local/lib/algos";
+    
     char **soFiles;
     int numFiles;
     SchedulingAlgorithm algo;
@@ -276,9 +277,9 @@ int main(int argc, char *argv[])
     gtk_init(&argc, &argv);
     // very basic GUI
     // LOCAL VERSION
-    builder = gtk_builder_new_from_file("prototype.glade");
+    // builder = gtk_builder_new_from_file("prototype.glade");
     // INSTALLATION VERSION
-    // builder = gtk_builder_new_from_file("/usr/local/lib/prototype.glade");
+    builder = gtk_builder_new_from_file("/usr/local/lib/prototype.glade");
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);

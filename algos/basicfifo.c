@@ -1,17 +1,13 @@
 #include "../misc.h"
-// gcc -shared -fPIC algos/basicfifo.c -o algos/basicfifo.so
-
-// FIFO scheduling algorithm with a queue
-
 void basicfifo(processus *head)
 {
-    affichP *aff=NULL;
-    affichP *q=aff;
+    viewProcess *view = NULL;
+    viewProcess *q = view;
     Queue *processQueue = createQueue();
     processus *sortedProcesses = sortProcesses(head);
     processus *current = sortedProcesses;
     int time = 0;
-    printf("\n FIFO Scheduling:\n");
+    printf("\nFIFO Scheduling: \n\n");
 
     while (current != NULL || processQueue->front != NULL)
     {
@@ -24,24 +20,24 @@ void basicfifo(processus *head)
         processus *executingProcess = dequeue(processQueue);
         if (executingProcess != NULL)
         {
-            printf("t %d: executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);           
-        
-		    affichP *i = malloc(sizeof(affichP));
-            strcpy(i->code,executingProcess->code);
-            i->ta=executingProcess->date_arr;
-            i->te=executingProcess->dur_exec_non_modif_proc;
+            printf("t %d: executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
+            viewProcess *i = malloc(sizeof(viewProcess));
+            strcpy(i->code, executingProcess->code);
+            i->ta = executingProcess->date_arr;
+            i->te = executingProcess->dur_exec;
             i->start = time;
-            i->end= time+executingProcess->dur_exec_modif_proc;
-            i->suiv=NULL;
-            
-            if(aff==NULL)
+            i->end = time + executingProcess->dur_exec_modif_proc;
+            i->suiv = NULL;
+
+            if (view == NULL)
             {
-           		aff=i;
-                q=i;
+                view = i;
+                q = i;
             }
-            else{
-            q->suiv=i;
-            q=i;
+            else
+            {
+                q->suiv = i;
+                q = i;
             }
             time += executingProcess->dur_exec_modif_proc;
         }
@@ -51,15 +47,15 @@ void basicfifo(processus *head)
             time++;
         }
     }
-    GantAndStatistic(aff);
+    GantAndStatistic(view);
 }
-
-
- int main()
- {
+/*
+int main()
+{
     FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_bcp(file);
+    processus *p = enreg_pcb(file);
     fclose(file);
     basicfifo(p);
-   	return 0;
+    return 0;
 }
+*/

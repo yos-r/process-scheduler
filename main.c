@@ -1,18 +1,8 @@
-// #include <stdio.h>
-// #include <stdlib.h>
-
 #include <dirent.h>
-
 #include <dlfcn.h>
-
-#include "misc.h" // miscellaneous functs/structs..
-
-// #include <string.h>
-// #include <ctype.h>
+#include "misc.h"
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>
-#define maxim 500     // the maximum stop time
-#define meth_affich 1 // to choose the display method of the grill either 1 or 2
 
 // TINKERING W/ GTK
 GtkWidget *window;
@@ -73,7 +63,7 @@ void getSOFiles(const char *directory, char ***soFiles, int *numFiles)
 {
     // Open the directory
     DIR *dir = opendir(directory);
-    //error happens here
+    // error happens here
     if (!dir)
     {
         fprintf(stderr, "Error opening directory!!!: %s\n", directory);
@@ -200,7 +190,7 @@ void on_feelingLucky_clicked(GtkButton *b)
 {
     gtk_stack_set_visible_child_name(stack1, "page1");
     FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_bcp(file);
+    processus *p = enreg_pcb(file);
     printf("PCB randomly generated \n");
     sortProcesses(p);
     displayTab(p);
@@ -209,9 +199,9 @@ void on_feelingLucky_clicked(GtkButton *b)
 }
 void on_generateFile_clicked(GtkButton *b)
 {
-    generateFile(5,10,10,10);
+    generateFile(5, 10, 10, 10);
     FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_bcp(file);
+    processus *p = enreg_pcb(file);
     fclose(file);
     displayTab(p);
     gtk_stack_set_visible_child_name(stack1, "page1");
@@ -227,12 +217,13 @@ void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 
     g_print("Algorithm selected: %s\n", algorithm_name);
     FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_bcp(file);
+    processus *p = enreg_pcb(file);
     fclose(file);
     algo(p);
 }
-void on_maxNumber_change_value(GtkSpinButton *spinbutton, gpointer user_data){
-        g_print("value changed \n");
+void on_maxNumber_change_value(GtkSpinButton *spinbutton, gpointer user_data)
+{
+    g_print("value changed \n");
 }
 
 void commandLine()
@@ -258,7 +249,7 @@ void commandLine()
     algo = loadSchedulingAlgorithm(soFiles[choice]); // 1 for testing multi-level
     // free(soFiles);
     FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_bcp(file);
+    processus *p = enreg_pcb(file);
     fclose(file);
     algo(p);
 }
@@ -267,7 +258,7 @@ int main(int argc, char *argv[])
     // start w/ the command line, find the .so files
     // commandLine();
     const char *directory = "/usr/local/lib/algos";
-    
+
     char **soFiles;
     int numFiles;
     SchedulingAlgorithm algo;

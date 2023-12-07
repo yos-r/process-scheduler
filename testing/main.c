@@ -22,7 +22,7 @@ typedef struct processus
 {
     char code[30];
     int date_arr;
-    int dur_exec_non_modif_proc;
+    int dur_exec;
     int dur_exec_modif_proc;
     int dur_non_modif_es;
     int dur_modif_es;
@@ -240,11 +240,11 @@ int som_acsii(char *code)
 }
 
 ///////////////////////////////////////////Functions for modifying the list of loaded processes/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-processus* enreg_bcp(FILE *fich_bcp,code_proc *code)
+processus* enreg_pcb(FILE *fich_bcp,code_proc *code)
 {
     processus *i= malloc(sizeof(processus));
     int date_arr;
-    int dur_exec_non_modif_proc;
+    int dur_exec;
     int dur_non_modif_es;
     int priorite;
     char *fileRead;
@@ -262,7 +262,7 @@ processus* enreg_bcp(FILE *fich_bcp,code_proc *code)
         date_arr=atoi(part);
 
         part = strtok (NULL, ";");
-        dur_exec_non_modif_proc=atoi(part);
+        dur_exec=atoi(part);
 
         part = strtok (NULL, ";");
         dur_non_modif_es=atoi(part);
@@ -272,8 +272,8 @@ processus* enreg_bcp(FILE *fich_bcp,code_proc *code)
 
         strcpy(i->code,code[0].cd);
         i->date_arr = date_arr;
-        i->dur_exec_non_modif_proc = dur_exec_non_modif_proc;
-        i->dur_exec_modif_proc = dur_exec_non_modif_proc;
+        i->dur_exec = dur_exec;
+        i->dur_exec_modif_proc = dur_exec;
         i->dur_non_modif_es=dur_non_modif_es;
         i->dur_modif_es=dur_non_modif_es;
         i->priorite=priorite;
@@ -281,7 +281,7 @@ processus* enreg_bcp(FILE *fich_bcp,code_proc *code)
         i->dur_pret=0;
         i->dur_blq=0;
         code++;
-        i->suiv = enreg_bcp(fich_bcp,code);
+        i->suiv = enreg_pcb(fich_bcp,code);
     }
     else
     {
@@ -289,7 +289,7 @@ processus* enreg_bcp(FILE *fich_bcp,code_proc *code)
         {
             strcpy(i->code,"zzzzzz");
             i->date_arr = 1000;
-            i->suiv = enreg_bcp(fich_bcp,code);
+            i->suiv = enreg_pcb(fich_bcp,code);
         }
     }
 
@@ -382,9 +382,9 @@ void trie_proc(processus *proc)
                 T->date_arr=T->suiv->date_arr;
                 T->suiv->date_arr=temp;
 
-                temp=T->dur_exec_non_modif_proc;
-                T->dur_exec_non_modif_proc=T->suiv->dur_exec_non_modif_proc;
-                T->suiv->dur_exec_non_modif_proc=temp;
+                temp=T->dur_exec;
+                T->dur_exec=T->suiv->dur_exec;
+                T->suiv->dur_exec=temp;
 
                 temp=T->dur_exec_modif_proc;
                 T->dur_exec_modif_proc=T->suiv->dur_exec_modif_proc;
@@ -1280,7 +1280,7 @@ void Round_robin_pro(processus *proc,int N,char *code,int qt,info proces[])
                 strcpy(cd_proc,"nothing");
                 T->cmt[i+2].ent_sor=1;
             }
-            T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+            T->dur_exec_modif_proc=T->dur_exec;
         }
         execution_proc++;
         i++;
@@ -1291,7 +1291,7 @@ void Round_robin_pro(processus *proc,int N,char *code,int qt,info proces[])
     T=proc;
     while(boucle==1)////////////////Data initialization
     {
-        T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+        T->dur_exec_modif_proc=T->dur_exec;
         T->dur_modif_es=T->dur_non_modif_es;
         T->dur_pret=0;
         T->etat=0;
@@ -1738,7 +1738,7 @@ void Round_robin_pro_2(processus *proc,int N,char *code,int qt,info proces[])
                 T->etat=1;
                 strcpy(cd_proc,"nothing");
             }
-            T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+            T->dur_exec_modif_proc=T->dur_exec;
         }
         execution_proc++;
         i++;
@@ -1749,7 +1749,7 @@ void Round_robin_pro_2(processus *proc,int N,char *code,int qt,info proces[])
     T=proc;
     while(boucle==1)////////////////Data initialization
     {
-        T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+        T->dur_exec_modif_proc=T->dur_exec;
         T->dur_modif_es=T->dur_non_modif_es;
         T->dur_pret=0;
         T->dur_blq=0;
@@ -1958,7 +1958,7 @@ void fifo_pro(processus *proc,int N,char *code,info proces[])
                 T->etat=1;
                 T->cmt[i+1].ent_sor=1;
             }
-            T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+            T->dur_exec_modif_proc=T->dur_exec;
             proc_lib=1;
         }
 
@@ -1971,7 +1971,7 @@ void fifo_pro(processus *proc,int N,char *code,info proces[])
     T=proc;
     while(boucle==1)////////////////Data initialization
     {
-        T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+        T->dur_exec_modif_proc=T->dur_exec;
         T->dur_modif_es=T->dur_non_modif_es;
         T->dur_pret=0;
         T->etat=0;
@@ -2309,7 +2309,7 @@ void fifo_pro_2(processus *proc,int N,char *code,info proces[])
         if(T->dur_exec_modif_proc==0&&T->etat==0)////test that it is better to put it after the treatment of the blocked ones
         {
             if(T->dur_modif_es!=0)T->etat=1;
-            T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+            T->dur_exec_modif_proc=T->dur_exec;
             proc_lib=1;
         }
 
@@ -2323,7 +2323,7 @@ void fifo_pro_2(processus *proc,int N,char *code,info proces[])
     T=proc;
     while(boucle==1)////////////////to initialize the data
     {
-        T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+        T->dur_exec_modif_proc=T->dur_exec;
         T->dur_modif_es=T->dur_non_modif_es;
         T->dur_pret=0;
         T->dur_blq=0;
@@ -2394,7 +2394,7 @@ void prio_avec_req(processus *proc,int N,char *code,info proces[])
 
         if((cpt_arr>1)||(cpt_arr==1&&strcmp(cd_proc,T->code)!=0))
         {
-            if(T->date_arr<=execution_proc&&T->etat==0&&T->dur_exec_modif_proc!=T->dur_exec_non_modif_proc)
+            if(T->date_arr<=execution_proc&&T->etat==0&&T->dur_exec_modif_proc!=T->dur_exec)
             {
                 tour++;
                 T->turn=tour;
@@ -2615,7 +2615,7 @@ void prio_avec_req(processus *proc,int N,char *code,info proces[])
                 T->cmt[i+1].ent_sor=1;
                 strcpy(cd_proc,"nothing");
             }
-            T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+            T->dur_exec_modif_proc=T->dur_exec;
         }
         execution_proc++;
         i++;
@@ -2627,7 +2627,7 @@ void prio_avec_req(processus *proc,int N,char *code,info proces[])
     T=proc;
     while(boucle==1)////////////////Data initialization
     {
-        T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+        T->dur_exec_modif_proc=T->dur_exec;
         T->dur_modif_es=T->dur_non_modif_es;
         T->dur_pret=0;
         T->dur_blq=0;
@@ -2702,7 +2702,7 @@ void prio_avec_req_2(processus *proc,int N,char *code,info proces[])
 
         if((cpt_arr>1)||(cpt_arr==1&&strcmp(cd_proc,T->code)!=0))
         {
-            if(T->date_arr<=execution_proc&&T->etat==0&&T->dur_exec_modif_proc!=T->dur_exec_non_modif_proc)
+            if(T->date_arr<=execution_proc&&T->etat==0&&T->dur_exec_modif_proc!=T->dur_exec)
             {
                 tour++;
                 T->turn=tour;
@@ -3046,7 +3046,7 @@ void prio_avec_req_2(processus *proc,int N,char *code,info proces[])
                 T->etat=1;
                 strcpy(cd_proc,"nothing");
             }
-            T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+            T->dur_exec_modif_proc=T->dur_exec;
         }
         execution_proc++;
         i++;
@@ -3058,7 +3058,7 @@ void prio_avec_req_2(processus *proc,int N,char *code,info proces[])
     T=proc;
     while(boucle==1)////////////////Data initialization
     {
-        T->dur_exec_modif_proc=T->dur_exec_non_modif_proc;
+        T->dur_exec_modif_proc=T->dur_exec;
         T->dur_modif_es=T->dur_non_modif_es;
         T->dur_pret=0;
         T->dur_blq=0;
@@ -4627,12 +4627,12 @@ void afficher_proc(processus *proc,int nbr,char nom_fich[])
         if(pos!=nbr)
         {
             printf("\n");
-            milieu(T->code,T->date_arr,T->dur_exec_non_modif_proc,T->dur_non_modif_es,T->priorite);
+            milieu(T->code,T->date_arr,T->dur_exec,T->dur_non_modif_es,T->priorite);
         }
         else
         {
             printf("\n");
-            fin_tab(T->code,T->date_arr,T->dur_exec_non_modif_proc,T->dur_non_modif_es,T->priorite);
+            fin_tab(T->code,T->date_arr,T->dur_exec,T->dur_non_modif_es,T->priorite);
         }
 
         if(T->suiv!=NULL)
@@ -4813,7 +4813,7 @@ int main()
                         else
                         {
                             pntr=fopen(nom_fich,"rt");
-                            bcp=enreg_bcp(pntr,&cod[0].cd);
+                            bcp=enreg_pcb(pntr,&cod[0].cd);
                             fclose(pntr);
 
                             T=bcp;
@@ -4867,7 +4867,7 @@ int main()
                             else
                             {
                                 pntr=fopen(nom_fich,"rt");
-                                bcp=enreg_bcp(pntr,&cod[0].cd);
+                                bcp=enreg_pcb(pntr,&cod[0].cd);
                                 fclose(pntr);
 
                                 T=bcp;

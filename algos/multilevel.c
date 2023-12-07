@@ -1,96 +1,115 @@
-// gcc -shared -fPIC algos/multilevel.c -o algos/multilevel.so
-
 #include "../misc.h"
-void multilevel(processus *head)
+void multilevel(processus *p)
 {
-    processus *sortedProcesses = sortProcesses(head);
-    processus *current = sortedProcesses;
-    int quantum = 3; // need to be customizable
-    Queue *readyQueue = createQueue();
-    int time = 0; // Simulation time
-    printf("\n  *** Multilevel  scheduling: \n");
-    processus *temp;
-    
-    while (current != NULL || readyQueue->front != NULL)
+    displayTab(p);
+    printf("\nMULTILEVEL Scheduling: \n\n");
+    int executedTime = 0;
+    viewProcess *view = NULL;
+    viewProcess *q = view;
+    int countP = countProcesses(p);
+    Process *processTable = convertListToTable(p, countP);
+    int quantum;
+    do
     {
-        while (current != NULL && current->date_arr <= time)
+        printf("\nEnter the quantum value : ");
+        scanf("%d", &quantum);
+        if (quantum <= 0)
         {
-            printf("t= %d Process w/ priority %d %s arrived and has %d units to execute \n", current->date_arr, current->priorite, current->code, current->dur_exec_modif_proc);
-            enqueue(readyQueue, current);
-            sortByPriorityQueue(readyQueue);
-            stateOfQueue3(readyQueue);
-            temp = current;
-            current = current->suiv;
+            printf("Invalid input. Please enter a positive integer >0.\n");
         }
-        // sort the queue by priority
-        sortByPriorityQueue(readyQueue);
-        // do we need round robin?
-        if (checkMulti(readyQueue))
+    } while (quantum <= 0);
+    qsort(processTable, countP, sizeof(Process), compareArrivalTime);
+    int time = 0;
+    int i;
+    int highestPriorityPosition = -1;
+    int highestPriority = 0;
+    while (!allProcessesCompleted(processTable, countP))
+    {
+        highestPriorityPosition = -1;
+        for (i = 0; i < countP; ++i)
         {
-            //gather what processes have the highest priority: build a linked list??
-            //execute roundrobin on that list?
-            // what about the time?
-            processus *liste=buildList(readyQueue);
-            displayTab(liste); // display the list of 
-            //
-            processus *exec = dequeue(readyQueue);
-            if (exec->dur_exec_modif_proc < quantum)
-            {
-                printf("T= %d: Executing process %s for %d units\n", time, exec->code, exec->dur_exec_modif_proc);
-                time += exec->dur_exec_modif_proc;
-                exec->dur_exec_modif_proc = 0;
-            }
-            else
-            {
-                printf("T= %d: Executing process %s for %d units\n", time, exec->code, quantum);
-                time += quantum;
-                exec->dur_exec_modif_proc -= quantum;
-            }
 
-            
-            if (exec->dur_exec_modif_proc <= 0)
+            if (processTable[i].dur_exec > 0 && processTable[i].date_arr <= time && processTable[i].priorite > highestPriority)
             {
-                printf(" at t= %d Process %s is done with execution\n",time, exec->code);
-                
+                highestPriorityPosition = i;
+                highestPriority = processTable[i].priorite;
             }
-            else
-            {
-                //enqueue the process when it completes its quantum.
-                printf("Process %s still has %d units remaining and is added at the queue \n", exec->code, exec ->dur_exec_modif_proc);
-                enqueue(readyQueue, exec);
-            }
-
-            
-
         }
-        else //no multilevel, just the usual
+        if (highestPriorityPosition == -1)
         {
-            processus *executingProcess = dequeue(readyQueue);
-
-            if (executingProcess != NULL)
+            for (i = 0; i < countP; ++i)
             {
-
-                printf("T= %d: executing process %s \n", time, executingProcess->code);
-                executingProcess->dur_exec_modif_proc -= 1; // decrement by 1
-                time += 1;
-
-                // POST-EXECTUION: EITHER DONE OR ADDED TO QUEUE
-                if (executingProcess->dur_exec_modif_proc <= 0)
+                if (processTable[i].dur_exec > 0 && processTable[i].date_arr <= time && processTable[i].priorite == highestPriority)
                 {
-                    printf("t=%d , process %s is done with execution\n", time, executingProcess->code);
+                    highestPriorityPosition = i;
+                    break;
+                }
+            }
+        }
+
+        if (highestPriorityPosition != -1)
+        {
+
+            printf("t= %d: executing process %s \n", time, processTable[highestPriorityPosition].code);
+            if (q == NULL || strcmp(q->code, processTable[highestPriorityPosition].code) != 0)
+            {
+                viewProcess *i = malloc(sizeof(viewProcess));
+                strcpy(i->code, processTable[highestPriorityPosition].code);
+                i->ta = processTable[highestPriorityPosition].date_arr;
+                i->te = processTable[highestPriorityPosition].dur_exec;
+                i->start = time;
+                i->end = time + 1;
+                i->suiv = NULL;
+                executedTime = 1;
+                if (view == NULL)
+                {
+                    view = i;
+                    q = i;
                 }
                 else
                 {
-                    // always add to the queue, because sorting will happen
-                    enqueue(readyQueue, executingProcess);
+                    q->suiv = i;
+                    q = i;
                 }
             }
-
             else
             {
-                printf("Time %d: CPU idle\n", time);
-                time += 1;
+                executedTime++;
+                q->end++;
+            }
+            processTable[highestPriorityPosition].dur_exec--;
+            if (processTable[highestPriorityPosition].dur_exec <= 0)
+            {
+                printf("t=%d , process %s is done with execution\n", time, processTable[highestPriorityPosition].code);
+                highestPriority = 0;
+            }
+            if (processTable[highestPriorityPosition].priorite == highestPriority && executedTime == quantum && processTable[highestPriorityPosition].dur_exec > 0)
+            {
+                Process temp = processTable[highestPriorityPosition];
+                for (i = highestPriorityPosition; i < countP - 1; ++i)
+                {
+                    processTable[i] = processTable[i + 1];
+                }
+                processTable[countP - 1] = temp;
             }
         }
+        else
+        {
+            printf("t= %d: CPU idle\n", time);
+        }
+        time++;
     }
+
+    free(processTable);
+    GantAndStatistic(view);
 }
+/*
+int main()
+{
+    FILE *file = fopen("pcb.txt", "rt");
+    processus *p = enreg_pcb(file);
+    fclose(file);
+    multilevel(p);
+    return 0;
+}
+*/

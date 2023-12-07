@@ -196,6 +196,17 @@ void on_configpcb_clicked(GtkButton *b)
     gtk_stack_set_visible_child_name(stack1, "page3");
     gtk_window_set_title(GTK_WINDOW(window), "PCB config");
 }
+void on_feelingLucky_clicked(GtkButton *b)
+{
+    gtk_stack_set_visible_child_name(stack1, "page1");
+    FILE *file = fopen("pcb.txt", "rt");
+    processus *p = enreg_bcp(file);
+    printf("PCB randomly generated \n");
+    sortProcesses(p);
+    displayTab(p);
+    fclose(file);
+    // gtk_window_set_title(GTK_WINDOW(window), "PCB config");
+}
 void on_generateFile_clicked(GtkButton *b)
 {
     generateFile(5,10,10,10);
@@ -222,18 +233,6 @@ void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 }
 void on_maxNumber_change_value(GtkSpinButton *spinbutton, gpointer user_data){
         g_print("value changed \n");
-}
-// tinkering w/ cairo 
-gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr)
-{
-
-    cairo_set_line_width(cr, 1.0);
-    cairo_set_source_rgb(cr, 0.0, 1.0, 0.0); // green color
-    cairo_rectangle(cr, 10, 10, 50, 30);
-    cairo_fill(cr);
-    // cairo_stroke(cr);
-    // g_print("currently drawing: ");
-    return false;
 }
 
 void commandLine()
@@ -290,7 +289,7 @@ int main(int argc, char *argv[])
     // generate the buttons
     for (int i = 0; i < numFiles; i++)
     {
-        g_print("huh %d : %s\n", i, soFiles[i]);
+        // g_print("huh %d : %s\n", i, soFiles[i]);
         gchar *function_name = soFiles[i];
         // Create a button with the function name
         GtkWidget *button = gtk_button_new_with_label(function_name);

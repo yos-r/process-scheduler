@@ -29,11 +29,11 @@ $(LIB_DIR):
 	sudo mkdir -p $(LIB_DIR)
 
 # rule for running main
-run: $(MAIN)
+run: $(MAIN) 
 	sudo mkdir -p $(LIB_DIR)
 	sudo cp prototype.glade /usr/local/lib/
 	sudo cp $(SRC_DIR)/*.so $(LIB_DIR)
-	./$(MAIN)
+	./$(MAIN) 2>/dev/null
 
 install: 
 # $(LIB_DIR) main

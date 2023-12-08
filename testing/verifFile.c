@@ -35,14 +35,14 @@ bool verifFile() {
         }
     }
     if(id_count==0)
-    	{ // file vide
+    	{ 
             printf("Your file is empty !!");
             //getch();
             getc;
             return false;
         }
     fclose(file);
-    return true;  // "id" est unique \n et comment
+    return true;  
 }
 
 int main() {

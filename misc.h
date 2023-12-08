@@ -127,65 +127,120 @@ void GantAndStatistic(viewProcess *view)
     TattenteMoy = TattenteMoy / nb;
     printf("Average rotation time=%.2f   Average waiting time=%.2f\n", TrotationMoy, TattenteMoy);
 }
+//verif file
+bool verifFile() {
+    FILE *file = fopen("pcb.txt", "r");
+    if (file == NULL) {
+        perror("Erreur");
+        // getch();
+        getc;
+        return false;
+    }
+    char ligne[100]; 
+	char id[10]; 
+    char ids[100][10]; 
+    int id_count=0;
+	int i,x, y, z;
+    while (fgets(ligne, sizeof(ligne), file) != NULL) {
+        if (sscanf(ligne,"%[^;];%d;%d;%d\n", id, &x, &y, &z)==4) {
+        	printf("%s;%d;%d;%d\n",id,x,y,z);   	
+            for (i = 0; i < id_count; i++) {
+                if (strcmp(id, ids[i]) == 0) {
+                    fclose(file);
+                    return false;  //id n'est pas unique
+                }
+            }
+            strcpy(ids[id_count], id);
+            id_count++;
+        } 
+		
+    }
+    if(id_count==0)
+    	{ 
+            printf("Your file is empty !!");
+            getc;
+            return false;
+        }
+    fclose(file);
+    return true;  
+}
+
 
 void generateFile()
 {
     FILE *f = fopen("pcb.txt", "w");
 
-    if (f == NULL)
-    {
-        printf("Erreur");
-        return;
-    }
-    int maxProcesses;
-    do
-    {
-        printf("Enter the maximum number of processes: ");
-        scanf("%d", &maxProcesses);
-        if (maxProcesses <= 0)
-        {
-            printf("Invalid input. Please enter a positive integer >0.\n");
-        }
-    } while (maxProcesses <= 0);
-    int maxTA;
-    do
-    {
-        printf("Enter the maximum number of Arrival Time: ");
-        scanf("%d", &maxTA);
-        if (maxTA <= 0)
-        {
-            printf("Invalid input. Please enter a positive integer >0.\n");
-        }
-    } while (maxTA <= 0);
-    int maxTE;
-    do
-    {
-        printf("Enter the maximum number of Execution Time: ");
-        scanf("%d", &maxTE);
-        if (maxTE <= 0)
-        {
-            printf("Invalid input. Please enter a positive integer >0.\n");
-        }
-    } while (maxTE <= 0);
-    int maxPRIO;
-    do
-    {
-        printf("Enter the maximum number of Priority: ");
-        scanf("%d", &maxPRIO);
-        if (maxPRIO <= 0)
-        {
-            printf("Invalid input. Please enter a positive integer >0.\n");
-        }
-    } while (maxPRIO <= 0);
+    // if (f == NULL)
+    // {
+    //     printf("Erreur");
+    //     return;
+    // }
+    // int maxProcesses;
+    // do
+    // {
+    //     printf("Enter the maximum number of processes: ");
+    //     scanf("%d", &maxProcesses);
+    //     if (maxProcesses <= 0)
+    //     {
+    //         printf("Invalid input. Please enter a positive integer >0.\n");
+    //     }
+    // } while (maxProcesses <= 0);
+    // int maxTA;
+    // do
+    // {
+    //     printf("Enter the maximum number of Arrival Time: ");
+    //     scanf("%d", &maxTA);
+    //     if (maxTA <= 0)
+    //     {
+    //         printf("Invalid input. Please enter a positive integer >0.\n");
+    //     }
+    // } while (maxTA <= 0);
+    // int maxTE;
+    // do
+    // {
+    //     printf("Enter the maximum number of Execution Time: ");
+    //     scanf("%d", &maxTE);
+    //     if (maxTE <= 0)
+    //     {
+    //         printf("Invalid input. Please enter a positive integer >0.\n");
+    //     }
+    // } while (maxTE <= 0);
+    // int maxPRIO;
+    // do
+    // {
+    //     printf("Enter the maximum number of Priority: ");
+    //     scanf("%d", &maxPRIO);
+    //     if (maxPRIO <= 0)
+    //     {
+    //         printf("Invalid input. Please enter a positive integer >0.\n");
+    //     }
+    // } while (maxPRIO <= 0);
     srand(time(NULL));
     int i;
-    int n = (rand() % maxProcesses) + 1;
+    int n = (rand() % 30) + 1;
     printf("%d processes generated \n", n);
     for (i = 0; i < n; i++)
     {
-        int TA = (rand() % maxTA);
-        int TE = (rand() % maxTE) + 1;
-        int PRIO = (rand() % maxPRIO) + 1;
+        int TA = (rand() % 10);
+        int TE = (rand() % 30) + 1;
+        int PRIO = (rand() % 5) + 1;
+        fprintf(f, "p%d;%d;%d;%d\n", i, TA, TE, PRIO);
+    }
+    fclose(f);
+}
+void generateFileParam(int maxNumber, int maxArrival, int maxExec, int maxPrio)
+{
+    FILE *f = fopen("pcb.txt", "w");
+
+    srand(time(NULL));
+    int i;
+    int n = (rand() % maxNumber) + 1;
+    printf("%d processes generated \n", n);
+    for (i = 0; i < n; i++)
+    {
+        int TA = (rand() % maxArrival);
+        int TE = (rand() % maxExec) + 1;
+        int PRIO = (rand() % maxPrio) + 1;
         fprintf(f, "p%d;%d;%d;%d\n", i, TA, TE, PRIO);
     }
     fclose(f);

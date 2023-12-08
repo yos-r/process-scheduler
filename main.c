@@ -4,22 +4,31 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>
 
-// TINKERING W/ GTK
+// global vars
 GtkWidget *window;
 GtkBuilder *builder;
 GtkStack *stack1;
 GtkBox *algorithm_box;
 GtkWidget *draw1;
-GtkWidget *configpcb;
+GtkButton *configpcb;
+GtkWidget *labelcheck;
+GtkWidget *maxNumber;
+GtkWidget *maxArrival;
+GtkWidget *maxPrio;
+GtkWidget *maxExec;
 
-gboolean on_draw1_draw(GtkDrawingArea *widget, cairo_t *cr); // will be used as signal . defined globally here
+typedef struct
+{
+    gint value1;
+    gint value2;
+    gint value3;
+    gint value4;
+} SpinButtonValues;
 
 typedef void (*SchedulingAlgorithm)(processus *);
 void extractFunctionName(const char *algorithmName, char *functionName)
 {
     const char *lastDot = strrchr(algorithmName, '.');
-
-    // Copy the substring before the last '.'
     if (lastDot)
     {
         size_t length = lastDot - algorithmName;
@@ -36,7 +45,7 @@ SchedulingAlgorithm loadSchedulingAlgorithm(const char *algorithmName)
 {
     char fullPath[256];
     printf("loading scheduling algo from lib");
-    // LOCAL VERSION
+    // LOCAL VERSION DO NOT REMOVE
     // snprintf(fullPath, sizeof(fullPath), "algos/%s", algorithmName);
     // INSTALLATION VERSION
     snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
@@ -58,12 +67,10 @@ SchedulingAlgorithm loadSchedulingAlgorithm(const char *algorithmName)
 
     return algorithm;
 }
-
 void getSOFiles(const char *directory, char ***soFiles, int *numFiles)
 {
     // Open the directory
     DIR *dir = opendir(directory);
-    // error happens here
     if (!dir)
     {
         fprintf(stderr, "Error opening directory!!!: %s\n", directory);
@@ -162,69 +169,125 @@ void displayMenu()
     }
 }
 
-void titre(void)
+void title(void)
 {
     printf("                 --------------------------------------------------------\n");
     printf("                |                     ~~ (❁´◡`❁) ~~                    |\n");
     printf("                |                PROCESS SCHEDULER APPLICATION              |\n");
     printf("                 --------------------------------------------------------\n");
 }
-// VERY BASIC GUI
 // button switches  between pages
 void on_switchbutton_clicked(GtkButton *b)
 {
     gtk_stack_set_visible_child_name(stack1, "page2");
-    g_print("switching to other page");
 }
 void on_switchbutton1_clicked(GtkButton *b)
 {
     gtk_stack_set_visible_child_name(stack1, "page1");
-    gtk_window_set_title(GTK_WINDOW(window), "Process scheduler application");
 }
 void on_configpcb_clicked(GtkButton *b)
 {
-    gtk_stack_set_visible_child_name(stack1, "page3");
-    gtk_window_set_title(GTK_WINDOW(window), "PCB config");
+    gtk_stack_set_visible_child_name(stack1, "page4");
+    gtk_label_set_text(GTK_LABEL(labelcheck), "");
 }
 void on_feelingLucky_clicked(GtkButton *b)
 {
-    gtk_stack_set_visible_child_name(stack1, "page1");
+    generateFile();
     FILE *file = fopen("pcb.txt", "rt");
     processus *p = enreg_pcb(file);
-    printf("PCB randomly generated \n");
     sortProcesses(p);
-    displayTab(p);
+    gtk_stack_set_visible_child_name(stack1, "page1");
+    
     fclose(file);
     // gtk_window_set_title(GTK_WINDOW(window), "PCB config");
 }
-void on_generateFile_clicked(GtkButton *b)
+void on_generateFile_clicked(GtkButton *b, gpointer user_data)
 {
-    generateFile(5, 10, 10, 10);
+    SpinButtonValues *values = (SpinButtonValues *)user_data;
+    values->value1 = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "maxNumber")));
+    values->value2 = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "maxArrival")));
+    values->value3 = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "maxExec")));
+    values->value4 = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "maxPrio")));
+    generateFileParam(values->value1, values->value2, values->value3, values->value4);
     FILE *file = fopen("pcb.txt", "rt");
     processus *p = enreg_pcb(file);
     fclose(file);
     displayTab(p);
     gtk_stack_set_visible_child_name(stack1, "page1");
-    gtk_window_set_title(GTK_WINDOW(window), "Process scheduler application");
+}
+void on_configRandom_clicked(GtkButton *b)
+{
+    gtk_stack_set_visible_child_name(stack1, "page3");
+}
+void on_goback1_clicked(GtkButton *b)
+{
+    gtk_stack_set_visible_child_name(stack1, "page4");
+    gtk_label_set_text(GTK_LABEL(labelcheck), " ");
+}
+void on_goback_clicked(GtkButton *b)
+{
+    gtk_stack_set_visible_child_name(stack1, "page4");
+    gtk_label_set_text(GTK_LABEL(labelcheck), " ");
+}
+void on_inputPCBfile_clicked(GtkButton *b)
+{
+    gtk_stack_set_visible_child_name(stack1, "page2");
+}
+void on_choosePCB_file_set(GtkFileChooserButton *fileChooserButton, gpointer user_data)
+{
+    gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(fileChooserButton));
+    g_print("Selected file: %s\n", filename);
+
+    FILE *selectedFile = fopen(filename, "r");
+    if (!selectedFile)
+    {
+        g_print("Error opening selected file: %s\n", filename);
+        g_free(filename);
+        return;
+    }
+
+    FILE *destinationFile = fopen("pcb.txt", "w");
+    if (!destinationFile)
+    {
+        g_print("Error opening destination file: pcb.txt\n");
+        fclose(selectedFile);
+        g_free(filename);
+        return;
+    }
+    char buffer[1024];
+    size_t bytesRead;
+    while ((bytesRead = fread(buffer, 1, sizeof(buffer), selectedFile)) > 0)
+    {
+        fwrite(buffer, 1, bytesRead, destinationFile);
+    }
+
+    fclose(selectedFile);
+    fclose(destinationFile);
+    g_free(filename);
+    if (!verifFile())
+    {
+        // g_print("You did not pass the vibe check ");
+        gtk_label_set_text(GTK_LABEL(labelcheck), "File is empty ! Try again");
+    }
+    else
+    {
+        g_print("File is valid ! ");
+        gtk_stack_set_visible_child_name(stack1, "page1");
+    }
 }
 
 void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 {
     const gchar *algorithm_name = gtk_button_get_label(button);
-    gtk_stack_set_visible_child_name(stack1, "page2");
     gtk_window_set_title(GTK_WINDOW(window), g_strdup(algorithm_name));
     SchedulingAlgorithm algo = loadSchedulingAlgorithm(g_strdup(algorithm_name));
-
     g_print("Algorithm selected: %s\n", algorithm_name);
     FILE *file = fopen("pcb.txt", "rt");
     processus *p = enreg_pcb(file);
     fclose(file);
     algo(p);
 }
-void on_maxNumber_change_value(GtkSpinButton *spinbutton, gpointer user_data)
-{
-    g_print("value changed \n");
-}
+
 
 void commandLine()
 {
@@ -253,10 +316,12 @@ void commandLine()
     fclose(file);
     algo(p);
 }
+
+
 int main(int argc, char *argv[])
 {
-    // start w/ the command line, find the .so files
     // commandLine();
+    title();
     const char *directory = "/usr/local/lib/algos";
 
     char **soFiles;
@@ -265,22 +330,28 @@ int main(int argc, char *argv[])
     getSOFiles(directory, &soFiles, &numFiles);
 
     gtk_init(&argc, &argv);
-    // very basic GUI
+
     // LOCAL VERSION
     // builder = gtk_builder_new_from_file("prototype.glade");
     // INSTALLATION VERSION
     builder = gtk_builder_new_from_file("/usr/local/lib/prototype.glade");
-
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     gtk_builder_connect_signals(builder, NULL);
     stack1 = GTK_STACK(gtk_builder_get_object(builder, "stack1"));
     algorithm_box = GTK_BOX(gtk_builder_get_object(builder, "algorithm_box"));
-    draw1 = GTK_WIDGET(gtk_builder_get_object(builder, "draw1"));
+        configpcb = GTK_BUTTON(gtk_builder_get_object(builder, "generateFile"));
+
+    labelcheck = GTK_WIDGET(gtk_builder_get_object(builder, "vibecheck"));
+
+ SpinButtonValues spin_button_values = {0, 0, 0, 0};
+
+        g_signal_connect(configpcb, "clicked", G_CALLBACK(on_generateFile_clicked), &spin_button_values );
+
+
     // generate the buttons
     for (int i = 0; i < numFiles; i++)
     {
-        // g_print("huh %d : %s\n", i, soFiles[i]);
         gchar *function_name = soFiles[i];
         // Create a button with the function name
         GtkWidget *button = gtk_button_new_with_label(function_name);

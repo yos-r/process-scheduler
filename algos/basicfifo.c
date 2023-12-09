@@ -7,13 +7,14 @@ void basicfifo(processus *head)
     processus *sortedProcesses = sortProcesses(head);
     processus *current = sortedProcesses;
     int time = 0;
-    printf("\nFIFO Scheduling: \n\n");
+    printf("\n FIFO Scheduling: \n\n");
 
     while (current != NULL || processQueue->front != NULL)
     {
         while (current != NULL && current->date_arr <= time)
         {
             enqueue(processQueue, current);
+            printf("t=%d",current->date_arr);
             current = current->suiv;
             stateOfQueue2(processQueue);
         }
@@ -49,13 +50,3 @@ void basicfifo(processus *head)
     }
     GantAndStatistic(view);
 }
-/*
-int main()
-{
-    FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_pcb(file);
-    fclose(file);
-    basicfifo(p);
-    return 0;
-}
-*/

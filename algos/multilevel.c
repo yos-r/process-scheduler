@@ -2,7 +2,7 @@
 void multilevel(processus *p)
 {
     displayTab(p);
-    printf("\nMULTILEVEL Scheduling: \n\n");
+    printf("\n MULTILEVEL Scheduling: \n\n");
     int executedTime = 0;
     viewProcess *view = NULL;
     viewProcess *q = view;
@@ -19,6 +19,7 @@ void multilevel(processus *p)
         }
     } while (quantum <= 0);
     qsort(processTable, countP, sizeof(Process), compareArrivalTime);
+
     int time = 0;
     int i;
     int highestPriorityPosition = -1;
@@ -77,12 +78,14 @@ void multilevel(processus *p)
                 executedTime++;
                 q->end++;
             }
+
             processTable[highestPriorityPosition].dur_exec--;
             if (processTable[highestPriorityPosition].dur_exec <= 0)
             {
                 printf("t=%d , process %s is done with execution\n", time, processTable[highestPriorityPosition].code);
                 highestPriority = 0;
             }
+
             if (processTable[highestPriorityPosition].priorite == highestPriority && executedTime == quantum && processTable[highestPriorityPosition].dur_exec > 0)
             {
                 Process temp = processTable[highestPriorityPosition];
@@ -103,13 +106,3 @@ void multilevel(processus *p)
     free(processTable);
     GantAndStatistic(view);
 }
-/*
-int main()
-{
-    FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_pcb(file);
-    fclose(file);
-    multilevel(p);
-    return 0;
-}
-*/

@@ -127,7 +127,7 @@ void GantAndStatistic(viewProcess *view)
     TattenteMoy = TattenteMoy / nb;
     printf("Average rotation time=%.2f   Average waiting time=%.2f\n", TrotationMoy, TattenteMoy);
 }
-//verif file
+
 bool verifFile() {
     FILE *file = fopen("pcb.txt", "r");
     if (file == NULL) {
@@ -165,56 +165,9 @@ bool verifFile() {
     return true;  
 }
 
-
 void generateFile()
 {
     FILE *f = fopen("pcb.txt", "w");
-
-    // if (f == NULL)
-    // {
-    //     printf("Erreur");
-    //     return;
-    // }
-    // int maxProcesses;
-    // do
-    // {
-    //     printf("Enter the maximum number of processes: ");
-    //     scanf("%d", &maxProcesses);
-    //     if (maxProcesses <= 0)
-    //     {
-    //         printf("Invalid input. Please enter a positive integer >0.\n");
-    //     }
-    // } while (maxProcesses <= 0);
-    // int maxTA;
-    // do
-    // {
-    //     printf("Enter the maximum number of Arrival Time: ");
-    //     scanf("%d", &maxTA);
-    //     if (maxTA <= 0)
-    //     {
-    //         printf("Invalid input. Please enter a positive integer >0.\n");
-    //     }
-    // } while (maxTA <= 0);
-    // int maxTE;
-    // do
-    // {
-    //     printf("Enter the maximum number of Execution Time: ");
-    //     scanf("%d", &maxTE);
-    //     if (maxTE <= 0)
-    //     {
-    //         printf("Invalid input. Please enter a positive integer >0.\n");
-    //     }
-    // } while (maxTE <= 0);
-    // int maxPRIO;
-    // do
-    // {
-    //     printf("Enter the maximum number of Priority: ");
-    //     scanf("%d", &maxPRIO);
-    //     if (maxPRIO <= 0)
-    //     {
-    //         printf("Invalid input. Please enter a positive integer >0.\n");
-    //     }
-    // } while (maxPRIO <= 0);
     srand(time(NULL));
     int i;
     int n = (rand() % 30) + 1;

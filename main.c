@@ -32,11 +32,10 @@ void extractFunctionName(const char *algorithmName, char *functionName)
     {
         size_t length = lastDot - algorithmName;
         strncpy(functionName, algorithmName, length);
-        functionName[length] = '\0'; // Null-terminate the string
+        functionName[length] = '\0'; 
     }
     else
     {
-        // No extension found, copy the whole string
         strcpy(functionName, algorithmName);
     }
 }
@@ -44,7 +43,7 @@ SchedulingAlgorithm loadSchedulingAlgorithm(const char *algorithmName)
 {
     char fullPath[256];
     printf("loading scheduling algo from lib");
-    // LOCAL VERSION DO NOT REMOVE
+    // LOCAL VERSION 
     // snprintf(fullPath, sizeof(fullPath), "algos/%s", algorithmName);
     snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
     void *handle = dlopen(fullPath, RTLD_LAZY);
@@ -101,7 +100,7 @@ void getSOFiles(const char *directory, char ***soFiles, int *numFiles)
     while ((entry = readdir(dir)) != NULL)
     {
         if (entry->d_type == DT_REG)
-        { // Regular file
+        { 
             const char *dot = strrchr(entry->d_name, '.');
             if (dot != NULL && strcmp(dot, ".so") == 0)
             {
@@ -122,39 +121,6 @@ void getSOFiles(const char *directory, char ***soFiles, int *numFiles)
     closedir(dir);
 
     *numFiles = count;
-}
-
-void displayMenu()
-{
-    DIR *dir;
-    struct dirent *ent;
-
-    if ((dir = opendir("algos")) != NULL)
-    {
-        int option = 1;
-
-        while ((ent = readdir(dir)) != NULL)
-        {
-            if (ent->d_type == DT_REG && strstr(ent->d_name, ".c") != NULL)
-            {
-                char algorithmName[300];
-                snprintf(algorithmName, sizeof(algorithmName), "algos/%s", ent->d_name);
-
-                SchedulingAlgorithm algorithm = loadSchedulingAlgorithm(algorithmName);
-
-                printf("%d. %s\n", option, ent->d_name);
-
-                option++;
-            }
-        }
-
-        closedir(dir);
-    }
-    else
-    {
-        perror("Error opening directory");
-        exit(EXIT_FAILURE);
-    }
 }
 
 void title(void)
@@ -260,7 +226,6 @@ void on_choosePCB_file_set(GtkFileChooserButton *fileChooserButton, gpointer use
         gtk_stack_set_visible_child_name(stack1, "page1");
     }
 }
-
 void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
 {
     const gchar *algorithm_name = gtk_button_get_label(button);
@@ -273,33 +238,6 @@ void on_algorithm_button_clicked(GtkButton *button, gpointer user_data)
     algo(p);
 }
 
-void commandLine()
-{
-    // LOCAL VERSION
-    // const char *directory = "algos";
-    // INSTALLATION VERSION
-    const char *directory = "/usr/local/lib/algos";
-
-    char **soFiles;
-    int numFiles;
-    SchedulingAlgorithm algo;
-    getSOFiles(directory, &soFiles, &numFiles);
-    printf("Found %d .so files / algorithms :\n", numFiles);
-    // generateFile();
-    for (int i = 0; i < numFiles; i++)
-    {
-        printf("%d : %s\n", i, soFiles[i]);
-    }
-    printf("choose algorithm");
-    int choice;
-    scanf("%d", &choice);
-    algo = loadSchedulingAlgorithm(soFiles[choice]); 
-    // free(soFiles);
-    FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_pcb(file);
-    fclose(file);
-    algo(p);
-}
 
 int main(int argc, char *argv[])
 {

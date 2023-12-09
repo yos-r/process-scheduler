@@ -6,7 +6,7 @@ void roundrobin(processus *head)
     processus *sortedProcesses = sortProcesses(head);
     processus *current = sortedProcesses;
     int quantum;
-    printf("\nRound Robin Scheduling: \n\n");
+    printf("\n Round Robin Scheduling: \n\n");
     do
     {
         printf("\nEnter the quantum value : ");
@@ -22,10 +22,12 @@ void roundrobin(processus *head)
     {
         while (current != NULL && current->date_arr <= time)
         {
-            printf("Process %s arrived at time %d\n", current->code, current->date_arr);
             enqueue(readyQueue, current);
+            printf("t=%d",current->date_arr);
+
             current = current->suiv;
             sortByLastWait(readyQueue);
+
             stateOfQueue2(readyQueue);
         }
         processus *executingProcess = dequeue(readyQueue);
@@ -35,7 +37,7 @@ void roundrobin(processus *head)
             {
                 if (q == NULL || strcmp(q->code, executingProcess->code) != 0)
                 {
-                    printf("T= %d: Executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
+                    printf("t= %d: Executing process %s for %d units\n", time, executingProcess->code, executingProcess->dur_exec_modif_proc);
                     viewProcess *i = malloc(sizeof(viewProcess));
                     strcpy(i->code, executingProcess->code);
                     i->ta = executingProcess->date_arr;
@@ -104,19 +106,9 @@ void roundrobin(processus *head)
         }
         else
         {
-            printf("Time %d: CPU idle\n", time);
+            printf("t= %d: CPU idle\n", time);
             time++;
         }
     }
     GantAndStatistic(view);
 }
-/*
-    int main()
-{
-    FILE *file = fopen("pcb.txt", "rt");
-    processus *p = enreg_pcb(file);
-    fclose(file);
-    roundrobin(p);
-    return 0;
-}
-*/

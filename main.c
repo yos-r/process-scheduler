@@ -43,8 +43,6 @@ SchedulingAlgorithm loadSchedulingAlgorithm(const char *algorithmName)
 {
     char fullPath[256];
     printf("loading scheduling algo from lib");
-    // LOCAL VERSION 
-    // snprintf(fullPath, sizeof(fullPath), "algos/%s", algorithmName);
     snprintf(fullPath, sizeof(fullPath), "/usr/local/lib/algos/%s", algorithmName);
     void *handle = dlopen(fullPath, RTLD_LAZY);
     if (!handle)
@@ -249,7 +247,6 @@ int main(int argc, char *argv[])
     getSOFiles(directory, &soFiles, &numFiles);
 
     gtk_init(&argc, &argv);
-    // builder = gtk_builder_new_from_file("prototype.glade");
     builder = gtk_builder_new_from_file("/usr/local/lib/prototype.glade");
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);

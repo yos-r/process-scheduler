@@ -147,7 +147,7 @@ bool verifFile() {
             for (i = 0; i < id_count; i++) {
                 if (strcmp(id, ids[i]) == 0) {
                     fclose(file);
-                    return false;  //id n'est pas unique
+                    return false;  
                 }
             }
             strcpy(ids[id_count], id);

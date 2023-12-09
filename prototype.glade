@@ -85,7 +85,7 @@
             </child>
             <child>
               <object class="GtkButton" id="feelingLucky">
-                <property name="label" translatable="yes">I'm feeling lucky (❁´◡`❁)</property>
+                <property name="label" translatable="yes">Random PCB</property>
                 <property name="width-request">229</property>
                 <property name="height-request">40</property>
                 <property name="visible">True</property>

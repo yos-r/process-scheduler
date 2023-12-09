@@ -132,8 +132,6 @@ bool verifFile() {
     FILE *file = fopen("pcb.txt", "r");
     if (file == NULL) {
         perror("Erreur");
-        // getch();
-        getc;
         return false;
     }
     char ligne[100]; 
@@ -141,19 +139,29 @@ bool verifFile() {
     char ids[100][10]; 
     int id_count=0;
 	int i,x, y, z;
+	int test=0;
     while (fgets(ligne, sizeof(ligne), file) != NULL) {
         if (sscanf(ligne,"%[^;];%d;%d;%d\n", id, &x, &y, &z)==4) {
-        	printf("%s;%d;%d;%d\n",id,x,y,z);   	
+        if(test==0){
+        printf("\n");
+    	printf("+------------+------------+---------------------------+----------+\n");
+   	printf("| %-10s | %-10s | %-25s | %-8s |\n", "Process", "Date Arr", "Execution Time", "Priority");
+    	printf("+------------+------------+---------------------------+----------+\n");
+        }
+        printf("| %-10s | %-10d | %-25d | %-8d |\n", id, x, y, z);
+        test++;
             for (i = 0; i < id_count; i++) {
                 if (strcmp(id, ids[i]) == 0) {
                     fclose(file);
+                printf("+------------+------------+---------------------------+----------+\n");
+                printf("two process with the same name !!\n");
                     return false;  
                 }
             }
+                       printf("+------------+------------+---------------------------+----------+\n");
             strcpy(ids[id_count], id);
             id_count++;
         } 
-		
     }
     if(id_count==0)
     	{ 

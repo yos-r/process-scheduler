@@ -126,8 +126,8 @@ void getSOFiles(const char *directory, char ***soFiles, int *numFiles)
 void title(void)
 {
     printf("                 --------------------------------------------------------\n");
-    printf("                |                     ~~ (❁´◡`❁) ~~                    |\n");
-    printf("                |                PROCESS SCHEDULER APPLICATION              |\n");
+    printf("                |                     ~~ (❁´◡`❁) ~~                     |\n");
+    printf("                |                PROCESS SCHEDULER APPLICATION           |\n");
     printf("                 --------------------------------------------------------\n");
 }
 void on_switchbutton_clicked(GtkButton *b)
